@@ -3,9 +3,9 @@ import './App.css'
 function App() {
 
   const todoList = [
-    {id: 1, title: ""},
-    {id: 2, title: ""},
-    {id: 3, title: ""},
+    {id: 1, title: "celebrate completing coding assignment for week 1"},
+    {id: 2, title: "draft mindset assignment for week 1"},
+    {id: 3, title: "review week 2 to make todos"},
   ]
 
   return (
