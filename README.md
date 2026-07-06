@@ -1,16 +1,23 @@
-# React + Vite
+## Daniela's Todo List
+Hello and welcome! 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+As part of my classwork in the "Web Development with Full-Stack Javascript" program with Code the Dream (CTD), I will use foundations from my knowledge in HTML, CSS, and JavaScript to learn React through this project -- creating a todo list app using React.js! 
 
-Currently, two official plugins are available:
+## Installation instructions
+- Prerequisite: Install Node.js
+1. Visit [project URL] (https://github.com/dhblanco/react26.3-ctd-todo-list-project/)
+2. Clone repository and install locally
+3. Run commands in terminal
+    * `git clone https://github.com/dhblanco/react26.3-ctd-todo-list-project/`
+    * `npm install`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## How to run the development server
+1. Within project root, run command
+    * `npm run dev`
+2. Locate URL, something like "Local: http://localhost:5173/"
+3. Open URL in browser to view live app
 
-## React Compiler
+## About me
+Author: Daniela Hernández Blanco
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+I am a student from Costa Rica learning programming through Code The Dream (CTD), a nonprofit organization based in Durham, NC. I hope to share my skills with community members in need of service and can connect in ways that help us keep dreaming and creating a life we can enjoy. 
