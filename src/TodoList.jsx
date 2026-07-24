@@ -1,14 +1,12 @@
-function TodoList() {
-    
-  const todoList = [
-    {id: 1, title: "celebrate completing coding assignment for week 1"},
-    {id: 2, title: "draft mindset assignment for week 1"},
-    {id: 3, title: "review week 2 to make todos"},
-  ]
+import TodoListItem from "./TodoListItem";
 
+const TodoList = ({todoList}) => {
     return (
       <ul>
-          {todoList.map(todo => <li key={todo.id}>{todo.title}</li>)}
+          { todoList.map((todo) => (
+              < TodoListItem key={todo.id} todo={todo} />
+            ))
+          }
       </ul>    
     );
 }
