@@ -11,7 +11,7 @@ function App() {
       id: Date.now(),
       title: todoTitle,
     };
-    setTodoList((prev) => [newTodo, ...prev]);
+    setTodoList((previous) => [newTodo, ...previous]);
   };
   
   return (
