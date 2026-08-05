@@ -1,4 +1,4 @@
-function TodoListItem ({todo,completeTodo}) {
+function TodoListItem ({todo,onCompleteTodo}) {
     return <li>{todo.title}</li>;
 };
 
