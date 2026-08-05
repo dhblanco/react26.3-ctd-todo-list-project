@@ -2,6 +2,7 @@ import { useRef } from "react";
 
 function TodoForm({ onAddTodo }) {
     const inputRef = useRef(null);
+    const [workingTodoTitle, setWorkingTodoTitle] = useState("");
 
     const handleAddTodo = (event) => {
         event.preventDefault();
@@ -24,6 +25,8 @@ function TodoForm({ onAddTodo }) {
                 placeholder={'Todo text'}
                 //prevent browser from submitting with an empty form
                 required
+                value={workingTodoTitle}
+                onChange={(event) => setWorkingTodoTitle(event.target.value)}
             />
             <button type="submit">
                 Add Todo
