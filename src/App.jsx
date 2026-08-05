@@ -4,6 +4,8 @@ import TodoForm from './TodoForm.jsx';
 import { useState } from 'react';
 
 function App() {
+  //todoList holds current state
+  //setTodoList updates the new state when called
   const [todoList, setTodoList] = useState([]);
   
   const addTodo = (todoTitle) => {
@@ -12,19 +14,23 @@ function App() {
       title: todoTitle,
       isCompleted: false,
     };
+
+    //ask React to update todo list state
+    //pass React a callback function
+    //then React supplies most updated todo list as "previous"
     setTodoList((previous) => [newTodo, ...previous]);
   };
 
   const completeTodo = (id) => {
-    setTodoList(
-      todoList.map( (todo) => {
+    //declare previous todo list as parameter
+    setTodoList((previous) => {
+      return previous.map( (todo) => {
         if (todo.id === id) {
           return {...todo, isCompleted: true};
-          } else {
-            return todo;
-          }
+          } 
+        return todo;
       })
-    )
+    });
   };
 
   return (
@@ -36,4 +42,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
