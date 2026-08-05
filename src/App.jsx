@@ -10,9 +10,15 @@ function App() {
     const newTodo = {
       id: Date.now(),
       title: todoTitle,
+      isCompleted: false,
     };
     setTodoList((previous) => [newTodo, ...previous]);
   };
+
+  const completeTodo = (id) => {
+    todoList.map(id);
+    if id===id{spread todo && isCompleted:true}
+  }
   
   return (
     <div>
