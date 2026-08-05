@@ -7,7 +7,7 @@ function TodoForm({ onAddTodo }) {
         event.preventDefault();
         
         const todoTitle = event.target.todoTitle.value.trim();
-        if (todoTitle && todoTitle != "") {
+        if (todoTitle) {
             onAddTodo(todoTitle);
             event.target.reset();
             inputRef.current.focus();
@@ -22,6 +22,7 @@ function TodoForm({ onAddTodo }) {
                 id="todoTitle"
                 name="todoTitle"
                 placeholder={'Todo text'}
+                required
             />
             <button type="submit">
                 Add Todo
