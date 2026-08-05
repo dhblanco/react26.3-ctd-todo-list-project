@@ -16,15 +16,22 @@ function App() {
   };
 
   const completeTodo = (id) => {
-    todoList.map(id);
-    if id===id{spread todo && isCompleted:true}
-  }
-  
+    setTodoList(
+      todoList.map( (todo) => {
+        if (todo.id === id) {
+          return {...todo, isCompleted: true};
+          } else {
+            return todo;
+          }
+      })
+    )
+  };
+
   return (
     <div>
       <h1>Todo List</h1>
       <TodoForm onAddTodo={addTodo} />
-      <TodoList todoList={todoList} />
+      <TodoList todoList={todoList} onCompleteTodo={completeTodo} />
     </div>
   );
 }
