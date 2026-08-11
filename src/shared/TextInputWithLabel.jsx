@@ -4,7 +4,7 @@ const TextInputWithLabel = ({ elementId, labelText, onChange, ref, value }) => {
             <label htmlFor={elementId}>{labelText}</label>
             <input 
                 ref={ref} 
-                type={labelText}
+                type="text"
                 id={elementId}
                 name={elementId}
                 value={value}
