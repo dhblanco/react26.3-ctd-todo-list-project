@@ -12,6 +12,7 @@ function Logon({ onSetEmail,onSetToken }) {
     //set up async function that uses try/catch/blocks
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setAuthError("");
         setIsLoggingOn(true);
 
         try {

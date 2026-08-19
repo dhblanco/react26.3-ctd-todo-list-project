@@ -87,6 +87,7 @@ function TodosPage({token}) {
         todo.id === newTodo.id ? data : todo
       )
     );
+    setError("");
   } catch (error) {
     // Remove the temporary todo if the API request failed
     setTodoList((previous) =>
@@ -138,6 +139,7 @@ function TodosPage({token}) {
         todo.id === id ? data : todo
     )
 );
+setError("");
     } catch (error) {
       // Roll back to the original todo if the API request failed
       setTodoList((previous) =>
@@ -190,6 +192,7 @@ function TodosPage({token}) {
             todo.id === editedTodo.id ? data : todo
             )
         );
+        setError("");
     } catch (error) {
       setTodoList((previous) =>
         previous.map((todo) =>
