@@ -15,9 +15,9 @@ function Logon({ onSetEmail,onSetToken })
         setIsLoggingOn(true);
 
         try {
-            const response = await fetch("api/users/logon", {
+            const response = await fetch("/api/users/logon", {
                 method: "POST",
-                headers: { "Content-Type": "application-json" },
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({
                     email,
