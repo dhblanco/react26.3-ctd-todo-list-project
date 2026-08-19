@@ -100,6 +100,9 @@ function TodosPage({token}) {
   const completeTodo = async (id) => {
     // Store the original todo in case we need to roll back
     const originalTodo = todoList.find((todo) => todo.id === id);
+    if (!originalTodo) {
+    return;
+}
 
     // Optimistically mark the todo as completed
     setTodoList((previous) =>
@@ -152,6 +155,9 @@ function TodosPage({token}) {
     const originalTodo = todoList.find(
       (todo) => todo.id === editedTodo.id
     );
+    if (!originalTodo) {
+    return;
+}
 
     // Optimistically update the todo
     setTodoList((previous) =>

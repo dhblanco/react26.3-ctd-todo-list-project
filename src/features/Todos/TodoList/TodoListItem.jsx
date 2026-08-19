@@ -48,7 +48,7 @@ function TodoListItem ({todo,onCompleteTodo,onUpdateTodo}) {
                         Cancel
                     </button>
                     <button
-                        type="submit"
+                        type="button"
                         disabled={!isValidTodoTitle(workingTitle)}
                     >
                         Update
