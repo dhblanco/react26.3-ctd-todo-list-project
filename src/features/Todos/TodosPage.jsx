@@ -49,44 +49,52 @@ function TodosPage({token}) {
 
     fetchTodos();
   }, [token]);
-
-setTodoList((previous) => [newTodo, ...previous]);
-
-    try {
-      const response = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': token,
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          title: todoTitle,
-          isCompleted: false,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Unable to add todo');
-      }
-
-      const data = await response.json();
-
-      // Replace temporary todo with the todo returned by the server
-      setTodoList((previous) =>
-        previous.map((todo) =>
-          todo.id === newTodo.id ? data : todo
-        )
-      );
-    } catch (error) {
-      // Remove the temporary todo if the API request failed
-      setTodoList((previous) =>
-        previous.filter((todo) => todo.id !== newTodo.id)
-      );
-
-      setError(error.message);
-    }
+  
+  const addTodo = async (todoTitle) => {
+  const newTodo = {
+    id: Date.now(),
+    title: todoTitle,
+    isCompleted: false,
   };
+
+  // Optimistically add the new todo to the list immediately
+  setTodoList((previous) => [newTodo, ...previous]);
+
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': token,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        title: todoTitle,
+        isCompleted: false,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to add todo');
+    }
+
+    const data = await response.json();
+
+    // Replace temporary todo with the todo returned by the server
+    setTodoList((previous) =>
+      previous.map((todo) =>
+        todo.id === newTodo.id ? data : todo
+      )
+    );
+  } catch (error) {
+    // Remove the temporary todo if the API request failed
+    setTodoList((previous) =>
+      previous.filter((todo) => todo.id !== newTodo.id)
+    );
+
+    setError(error.message);
+  }
+};
 
   const completeTodo = async (id) => {
     // Store the original todo in case we need to roll back
