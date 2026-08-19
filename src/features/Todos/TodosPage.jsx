@@ -128,6 +128,13 @@ function TodosPage({token}) {
       if (!response.ok) {
         throw new Error('Unable to complete todo');
       }
+    const data = await response.json();
+
+    setTodoList((previous) =>
+    previous.map((todo) =>
+        todo.id === id ? data : todo
+    )
+);
     } catch (error) {
       // Roll back to the original todo if the API request failed
       setTodoList((previous) =>
@@ -170,6 +177,13 @@ function TodosPage({token}) {
       if (!response.ok) {
         throw new Error('Unable to update todo');
       }
+      const data = await response.json();
+
+        setTodoList((previous) =>
+        previous.map((todo) =>
+            todo.id === editedTodo.id ? data : todo
+            )
+        );
     } catch (error) {
       setTodoList((previous) =>
         previous.map((todo) =>
