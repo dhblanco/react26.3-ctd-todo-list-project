@@ -1,6 +1,6 @@
 import TodoListItem from "./TodoListItem";
 
-const TodoList = ({ todoList, onCompleteTodo }) => {
+const TodoList = ({ todoList, onCompleteTodo, onUpdateTodo }) => {
   const filteredTodoList = todoList.filter((todo) => !todo.isCompleted);
 
   return filteredTodoList.length === 0 ? (
@@ -12,6 +12,7 @@ const TodoList = ({ todoList, onCompleteTodo }) => {
           key={todo.id}
           todo={todo}
           onCompleteTodo={onCompleteTodo}
+          onUpdateTodo={onUpdateTodo}
         />
       ))}
     </ul>
