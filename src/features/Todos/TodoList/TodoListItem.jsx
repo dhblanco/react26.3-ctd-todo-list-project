@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import TextInputWithLabel from "../../shared/TextInputWithLabel";
-import { isValidTodoTitle } from "../../utils/todoValidation";
+import TextInputWithLabel from "../../../shared/TextInputWithLabel";
+import { isValidTodoTitle } from "../../../utils/todoValidation";
 
 function TodoListItem ({todo,onCompleteTodo,onUpdateTodo}) {
     const inputRef = useRef(null);
@@ -48,8 +48,7 @@ function TodoListItem ({todo,onCompleteTodo,onUpdateTodo}) {
                         Cancel
                     </button>
                     <button
-                        type="button"
-                        onClick={handleUpdate}
+                        type="submit"
                         disabled={!isValidTodoTitle(workingTitle)}
                     >
                         Update
