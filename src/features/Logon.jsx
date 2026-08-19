@@ -1,12 +1,6 @@
 import { useState } from "react";
 
-function Logon({
-    //below is a placeholder function to be removed in part 4 of this assignment
-    //currently workong on part 3 steps
-    newProp = () => {}
-    onSetEmail = () => {},
-    onSetToken = () => {},
-    }) 
+function Logon({ onSetEmail,onSetToken }) 
     {//set up authentication state
     //  controlled form inputs
     const [email, setEmail] = useState("");
