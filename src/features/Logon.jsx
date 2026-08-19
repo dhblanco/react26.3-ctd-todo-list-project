@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-function Logon({ onSetEmail,onSetToken }) 
-    {//set up authentication state
+function Logon({ onSetEmail,onSetToken }) {
+    //set up authentication state
     //  controlled form inputs
     const [email, setEmail] = useState("");
     //  to display login failure

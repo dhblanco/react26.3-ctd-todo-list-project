@@ -40,6 +40,7 @@ function TodosPage({token}) {
         const data = await response.json();
 
         setTodoList(data.tasks);
+        setError("");
       } catch (error) {
         setError(error.message);
       } finally {
