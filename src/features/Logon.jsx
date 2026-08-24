@@ -2,13 +2,20 @@ import { useState } from "react";
 
 function Logon({ onSetEmail,onSetToken }) {
     //set up authentication state
+
     //  controlled form inputs
     const [email, setEmail] = useState("");
+
     //  to display login failure
     const [password, setPassword] = useState("");
+
     //  to show loading state during logon
     const [isLoggingOn, setIsLoggingOn] = useState(false);
+
+    // to show error messages as needed
     const [authError, setAuthError] = useState("");
+
+
     //set up async function that uses try/catch/blocks
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -41,9 +48,9 @@ function Logon({ onSetEmail,onSetToken }) {
     return (
         <form onSubmit={handleSubmit}>
             {authError && (
-                <div>
+                <section>
                     <p>{authError}</p>
-                </div>
+                </section>
             )}
             <label htmlFor="email">Email</label>
             <input
@@ -63,6 +70,9 @@ function Logon({ onSetEmail,onSetToken }) {
                 onChange={(event) => setPassword(event.target.value)}
                 required
             />
+            {isLoggingOn && (
+                <p>Processing...</p>
+            )}
             <button
                 type="submit"
                 disabled={isLoggingOn}
