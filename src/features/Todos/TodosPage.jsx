@@ -11,6 +11,9 @@ function TodosPage({token}) {
     //tracks whether todo list is loading
     const [isTodoListLoading, setIsTodoListLoading] = useState(false);
 
+    const [sortBy, setSortBy] = useState("createdAt");
+    const [sortDirection, setSortDirection] = useState("desc");
+
     useEffect(() => {
     if (!token) return;
 
@@ -19,6 +22,8 @@ function TodosPage({token}) {
 
       try {
         const params = new URLSearchParams({
+          sortBy,
+          sortDirection,
           limit: 100,
         });
 
@@ -49,7 +54,7 @@ function TodosPage({token}) {
     };
 
     fetchTodos();
-  }, [token]);
+  }, [token, sortBy, sortDirection]);
   
   const addTodo = async (todoTitle) => {
   const newTodo = {
