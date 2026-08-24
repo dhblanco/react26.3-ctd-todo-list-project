@@ -1,57 +1,24 @@
 import './App.css';
-import TodoList from './features/TodoList/TodoList.jsx';
-import TodoForm from './features/TodoForm.jsx';
+import TodosPage from './features/Todos/TodosPage';
+import Logon from './features/Logon';
+import Header from './shared/Header';
 import { useState } from 'react';
 
 function App() {
-  //todoList holds current state
-  //setTodoList updates the new state when called
-  const [todoList, setTodoList] = useState([]);
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
   
-  const addTodo = (todoTitle) => {
-    const newTodo = {
-      id: Date.now(),
-      title: todoTitle,
-      isCompleted: false,
-    };
-
-    //ask React to update todo list state
-    //pass React a callback function
-    //then React supplies most updated todo list as "previous"
-    setTodoList((previous) => [newTodo, ...previous]);
-  };
-
-  const completeTodo = (id) => {
-    //declare previous todo list as parameter
-    setTodoList((previous) => {
-      return previous.map( (todo) => {
-        if (todo.id === id) {
-          return {...todo, isCompleted: true};
-          } 
-        return todo;
-      })
-    });
-  };
-
-  const updateTodo = (editedTodo) => {
-    const updatedTodos = todoList.map((todo) => {
-        if (todo.id === editedTodo.id) {
-          return {...editedTodo};
-        }
-        return todo;
-    });
-    setTodoList(updatedTodos);
-  };
-
   return (
     <div>
-      <h1>Todo List</h1>
-      <TodoForm onAddTodo={addTodo} />
-      <TodoList 
-        todoList={todoList} 
-        onCompleteTodo={completeTodo} 
-        onUpdateTodo={updateTodo}
-      />
+      <Header />
+      { token ? (
+        <TodosPage token={token} />
+        ) : (
+        <Logon
+            onSetEmail={setEmail}
+            onSetToken={setToken}
+        />
+     )}
     </div>
   );
 }
