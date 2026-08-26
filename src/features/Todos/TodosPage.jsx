@@ -8,8 +8,11 @@ function TodosPage({token}) {
     //todoList holds current state
     //setTodoList updates the new state when called
     const [todoList, setTodoList] = useState([]);
+
     //stores API error messages
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
+    const [filterError, setFilterError] = useState("");
+
     //tracks whether todo list is loading
     const [isTodoListLoading, setIsTodoListLoading] = useState(false);
 
@@ -29,6 +32,7 @@ function TodosPage({token}) {
       setDataVersion(prev => prev + 1);
       console.log("Invalidating memo cache after todo mutation");
     }, []);
+
 
     useEffect(() => {
     if (!token) return;
@@ -68,8 +72,14 @@ function TodosPage({token}) {
 
         setTodoList(data.tasks);
         setError("");
+        setFilterError("");
+
       } catch (error) {
-        setError(error.message);
+        if (debouncedFilterTerm || sortBy !== "createdAt" || sortDirection !== "desc") {
+          setFilterError(`Error filtering/sorting todos: $error.message)`);
+        }  else {
+            setError(error.message);
+        }
       } finally {
         setIsTodoListLoading(false);
       }
@@ -248,6 +258,27 @@ function TodosPage({token}) {
                     <button onClick={() => setError('')}>Clear Error</button>
                 </div>
            )}
+
+      {filterError && (
+        <div>
+          <p>{filterError}</p>
+
+          <button onClick={() => setFilterError("")}>
+            Clear Filter Error
+          </button>
+
+          <button
+            onClick={() => {
+              setFilterTerm("");
+              setSortBy("createdAt");
+              setSortDirection("desc");
+              setFilterError("");
+            }}
+          >
+            Reset Filters
+          </button>
+        </div>
+      )}
 
       {isTodoListLoading && <p>Loading todos...</p>}
             <FilterInput
