@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm';
 import useDebounce from '../../utils/useDebounce';
@@ -17,10 +17,18 @@ function TodosPage({token}) {
     const [sortDirection, setSortDirection] = useState("desc");
 
     const [filterTerm, setFilterTerm] = useState("");
+    
     const debouncedFilterTerm = useDebounce(filterTerm, 300);
     const handleFilterChange = (newTerm) => {
       setFilterTerm(newTerm);
     };
+
+    const [dataVersion, setDataVersion] = useState(0);
+
+    const invalidateCache = useCallback(() => {
+      setDataVersion(prev => prev + 1);
+      console.log("Invalidating memo cache after todo mutation");
+    }, []);
 
     useEffect(() => {
     if (!token) return;
@@ -32,10 +40,6 @@ function TodosPage({token}) {
         const paramsObject = {
           sortBy,
           sortDirection,
-          // part 1 instructions say add limit, 
-          // but part 2 instructions example does not have include the same
-          // so i'm not sure whether to remove this
-          // and but it back for now
           limit: 100,
         };
 
@@ -110,6 +114,9 @@ function TodosPage({token}) {
         todo.id === newTodo.id ? data : todo
       )
     );
+
+    invalidateCache();
+
     setError("");
   } catch (error) {
     // Remove the temporary todo if the API request failed
@@ -160,9 +167,12 @@ function TodosPage({token}) {
     setTodoList((previous) =>
     previous.map((todo) =>
         todo.id === id ? data : todo
-    )
-);
-setError("");
+      )
+   );
+
+   invalidateCache();
+
+   setError("");
     } catch (error) {
       // Roll back to the original todo if the API request failed
       setTodoList((previous) =>
@@ -215,6 +225,9 @@ setError("");
             todo.id === editedTodo.id ? data : todo
             )
         );
+
+        invalidateCache();
+
         setError("");
     } catch (error) {
       setTodoList((previous) =>
@@ -246,6 +259,7 @@ setError("");
                 todoList={todoList} 
                 onCompleteTodo={completeTodo} 
                 onUpdateTodo={updateTodo}
+                dataVersion={dataVersion}
             />
         </div>
     );
