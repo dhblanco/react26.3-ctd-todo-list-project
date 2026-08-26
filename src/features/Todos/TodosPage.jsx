@@ -32,6 +32,11 @@ function TodosPage({token}) {
         const paramsObject = {
           sortBy,
           sortDirection,
+          // part 1 instructions say add limit, 
+          // but part 2 instructions example does not have include the same
+          // so i'm not sure whether to remove this
+          // and but it back for now
+          limit: 100,
         };
 
         if (debouncedFilterTerm) {
