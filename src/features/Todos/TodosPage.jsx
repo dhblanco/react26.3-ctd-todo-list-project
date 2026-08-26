@@ -3,6 +3,7 @@ import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm';
 import useDebounce from '../../utils/useDebounce';
 import FilterInput from '../../shared/FilterInput';
+import SortBy from '../../shared/SortBy';
 
 function TodosPage({token}) {
     //todoList holds current state
@@ -283,6 +284,12 @@ function TodosPage({token}) {
             <FilterInput
                 filterTerm={filterTerm}
                 onFilterChange={handleFilterChange}
+            />
+            <SortBy
+              sortBy={sortBy}
+              sortDirection={sortDirection}
+              onSortByChange={setSortBy}
+              onSortDirectionChange={setSortDirection}
             />
             <TodoForm onAddTodo={addTodo} />
             <TodoList 
