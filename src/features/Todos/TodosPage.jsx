@@ -75,7 +75,11 @@ function TodosPage({token}) {
         setFilterError("");
 
       } catch (error) {
-        if (debouncedFilterTerm || sortBy !== "createdAt" || sortDirection !== "desc") {
+        if (
+          debouncedFilterTerm || 
+          sortBy !== "createdAt" || 
+          sortDirection !== "desc"
+        ) {
           setFilterError(`Error filtering/sorting todos: ${error.message}`);
         }  else {
             setError(`Error fetching todos: ${error.message}`);
