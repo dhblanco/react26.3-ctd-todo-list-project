@@ -9,8 +9,8 @@ const TodoList = ({ todoList, onCompleteTodo, onUpdateTodo, dataVersion }) => {
     const incompleteTodos = todoList.filter((todo) => !todo.isCompleted);
 
     return {
-      version: dataVersion;
-      todos: incompleteTodos;
+      version: dataVersion,
+      todos: incompleteTodos,
     };
   }, [todoList, dataVersion]);
 
