@@ -76,7 +76,7 @@ function TodosPage({token}) {
 
       } catch (error) {
         if (debouncedFilterTerm || sortBy !== "createdAt" || sortDirection !== "desc") {
-          setFilterError(`Error filtering/sorting todos: ${error.message})`);
+          setFilterError(`Error filtering/sorting todos: ${error.message}`);
         }  else {
             setError(`Error fetching todos: ${error.message}`);
         }
