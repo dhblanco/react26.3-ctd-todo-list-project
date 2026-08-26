@@ -4,7 +4,6 @@ import { useMemo } from "react";
 const TodoList = ({ todoList, onCompleteTodo, onUpdateTodo, dataVersion }) => {
 
   const filteredTodoList = useMemo(() => {
-    console.log(`Recalculating filtered todos (v${dataVersion})`);
     
     const incompleteTodos = todoList.filter((todo) => !todo.isCompleted);
 
@@ -14,7 +13,7 @@ const TodoList = ({ todoList, onCompleteTodo, onUpdateTodo, dataVersion }) => {
     };
   }, [todoList, dataVersion]);
 
-  return filteredTodoList.length === 0 ? (
+  return filteredTodoList.todos.length === 0 ? (
     <p>Add todo above to get started</p>
   ) : (
     <ul>

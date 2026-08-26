@@ -30,7 +30,6 @@ function TodosPage({token}) {
 
     const invalidateCache = useCallback(() => {
       setDataVersion(prev => prev + 1);
-      console.log("Invalidating memo cache after todo mutation");
     }, []);
 
 
@@ -76,9 +75,9 @@ function TodosPage({token}) {
 
       } catch (error) {
         if (debouncedFilterTerm || sortBy !== "createdAt" || sortDirection !== "desc") {
-          setFilterError(`Error filtering/sorting todos: $error.message)`);
+          setFilterError(`Error filtering/sorting todos: ${error.message})`);
         }  else {
-            setError(error.message);
+            setError(`Error fetching todos: ${error.message}`);
         }
       } finally {
         setIsTodoListLoading(false);
