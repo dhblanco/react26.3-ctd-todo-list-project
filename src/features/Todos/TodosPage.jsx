@@ -6,28 +6,11 @@ import FilterInput from '../../shared/FilterInput';
 import SortBy from '../../shared/SortBy';
 
 function TodosPage({token}) {
-    //todoList holds current state
-    //setTodoList updates the new state when called
-    const [todoList, setTodoList] = useState([]);
 
-    //stores API error messages
-    const [error, setError] = useState("");
-    const [filterError, setFilterError] = useState("");
-
-    //tracks whether todo list is loading
-    const [isTodoListLoading, setIsTodoListLoading] = useState(false);
-
-    const [sortBy, setSortBy] = useState("createdAt");
-    const [sortDirection, setSortDirection] = useState("desc");
-
-    const [filterTerm, setFilterTerm] = useState("");
-    
     const debouncedFilterTerm = useDebounce(filterTerm, 300);
     const handleFilterChange = (newTerm) => {
       setFilterTerm(newTerm);
     };
-
-    const [dataVersion, setDataVersion] = useState(0);
 
     const invalidateCache = useCallback(() => {
       setDataVersion(prev => prev + 1);
