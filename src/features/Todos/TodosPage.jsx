@@ -1,27 +1,45 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useReducer } from 'react';
 import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm';
 import useDebounce from '../../utils/useDebounce';
 import FilterInput from '../../shared/FilterInput';
 import SortBy from '../../shared/SortBy';
+import { 
+  todoReducer,
+  initialTodoState,
+  TODO_ACTIONS,
+} from '../../reducers/todoReducer';
 
 function TodosPage({token}) {
 
-    const debouncedFilterTerm = useDebounce(filterTerm, 300);
-    const handleFilterChange = (newTerm) => {
-      setFilterTerm(newTerm);
-    };
+  const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+  const {
+    todoList,
+    error,
+    filterError,
+    isTodoListLoading,
+    sortBy,
+    sortDirection,
+    filterTerm,
+    dataVersion,
+  } = state;
 
-    const invalidateCache = useCallback(() => {
-      setDataVersion(prev => prev + 1);
-    }, []);
+  const debouncedFilterTerm = useDebounce(filterTerm, 300);
+  
+  function handleFilterChange(newTerm) {
+    setFilterTerm(newTerm);
+  }
 
+  const invalidateCache = useCallback(() => {
+    setDataVersion(prev => prev + 1);
+  }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (!token) return;
 
-    const fetchTodos = async () => {
-      setIsTodoListLoading(true);
+    async function fetchTodos() {
+
+      dispatch({ type: TODO_ACTIONS.FETCH_START });
 
       try {
         const paramsObject = {
@@ -32,7 +50,7 @@ function TodosPage({token}) {
 
         if (debouncedFilterTerm) {
           paramsObject.find = debouncedFilterTerm;
-        }
+        };
 
         const params = new URLSearchParams(paramsObject);
 
@@ -45,85 +63,90 @@ function TodosPage({token}) {
 
         if (response.status === 401) {
           throw new Error('unauthorized');
-        }
+        };
 
         if (!response.ok) {
           throw new Error('Unable to fetch todos');
-        }
+        };
 
         const data = await response.json();
 
-        setTodoList(data.tasks);
-        setError("");
-        setFilterError("");
+        dispatch({
+          type: TODO_ACTIONS.FETCH_SUCCESS,
+          payload: {
+            todos: data.tasks
+          },
+        });
 
       } catch (error) {
-        if (
-          debouncedFilterTerm || 
-          sortBy !== "createdAt" || 
-          sortDirection !== "desc"
-        ) {
-          setFilterError(`Error filtering/sorting todos: ${error.message}`);
-        }  else {
-            setError(`Error fetching todos: ${error.message}`);
-        }
-      } finally {
-        setIsTodoListLoading(false);
+
+        const isFilterError = debouncedFilterTerm ||
+          sortBy !== "createdAt" ||
+          sortDirection !== "desc";
+
+        dispatch({
+          type: TODO_ACTIONS.FETCH_ERROR,
+          payload: {
+            message: isFilterError
+              ? `Error filtering/sorting todos: ${error.message}`
+              : `Error fetching todos: ${error.message}`,
+            isFilterError,
+          },
+        });
       }
-    };
+    } 
 
     fetchTodos();
+
   }, [token, sortBy, sortDirection, debouncedFilterTerm]);
   
-  const addTodo = async (todoTitle) => {
-  const newTodo = {
-    id: Date.now(),
-    title: todoTitle,
-    isCompleted: false,
-  };
+  async function addTodo(todoTitle) {
 
-  // Optimistically add the new todo to the list immediately
-  setTodoList((previous) => [newTodo, ...previous]);
+    const newTodo = {
+      id: Date.now(),
+      title: todoTitle,
+      isCompleted: false,
+    };
+    /*MIGRATE LOGIC TO ADD_TODO_START
+    // Optimistically add the new todo to the list immediately
+    setTodoList((previous) => [newTodo, ...previous]); */
 
-  try {
-    const response = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': token,
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        title: todoTitle,
-        isCompleted: false,
-      }),
-    });
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: todoTitle,
+          isCompleted: false,
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error('Unable to add todo');
-    }
+      if (!response.ok) {
+        throw new Error('Unable to add todo');
+      }
 
-    const data = await response.json();
+      const data = await response.json();
 
-    // Replace temporary todo with the todo returned by the server
-    setTodoList((previous) =>
-      previous.map((todo) =>
-        todo.id === newTodo.id ? data : todo
+      // Replace temporary todo with the todo returned by the server
+      setTodoList((previous) => previous.map((todo) => todo.id === newTodo.id ? data : todo
       )
-    );
+      );
 
-    invalidateCache();
+      invalidateCache();
 
-    setError("");
-  } catch (error) {
-    // Remove the temporary todo if the API request failed
-    setTodoList((previous) =>
-      previous.filter((todo) => todo.id !== newTodo.id)
-    );
+      setError("");
+    } catch (error) {
+      // Remove the temporary todo if the API request failed
+      setTodoList((previous) => previous.filter((todo) => todo.id !== newTodo.id)
+      );
 
-    setError(error.message);
+      setError(error.message);
+    }
   }
-};
 
   const completeTodo = async (id) => {
     // Store the original todo in case we need to roll back

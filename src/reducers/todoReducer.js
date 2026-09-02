@@ -33,7 +33,61 @@ export const initialTodoState = {
 
 export function todoReducer(state, action) {
     switch (action.type) {
+        case TODO_ACTIONS.FETCH_START:
+            return {
+                ...state,
+                isTodoListLoading: true,
+                error: '',
+                filterError: '',
+            };
+
+        case TODO_ACTIONS.FETCH_SUCCESS:
+            return {
+                ...state,
+                todoList: action.payload.todos,
+                isTodoListLoading: false,
+                error: '',
+                filterError: '',
+        };
+
+        case TODO_ACTIONS.FETCH_ERROR:
+            return {
+                ...state,
+                isTodoListLoading: false,
+                error: action.payload.isFilterError
+                    ? ''
+                    : action.payload.message,
+                filterError: action.payload.isFilterError
+                    ? action.payload.message
+                    : '',
+        };
+
+        case TODO_ACTIONS.ADD_TODO_START:
+            return {
+                ...state,
+                //migrated logic: setTodoList((previous) => [newTodo, ...previous]);
+        };
+
+        case TODO_ACTIONS.ADD_TODO_SUCCESS:
+            return {
+                ...state,
+                //migrated logic,
+        };
+
+        case TODO_ACTIONS.ADD_TODO_ERROR:
+            return {
+                ...state,
+                //migrated logic,
+        };
+
         //add cases here
+        /*  example case skeleton
+                case TODO_ACTIONS.ACTION_NAME:
+            return {
+                ...state,
+                //migrated logic,
+        };
+        */
         default:
             throw new Error(`Unknown action type: ${action.type}`);
         }
