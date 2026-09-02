@@ -89,19 +89,20 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                     // Optimistically mark the todo as completed
-                todoList: state.todoList.map((todo) => {
-                    if (todo.id === action.payload.id) {
-                        return { ...todo, isCompleted: true };
-                    };
-                    return todo;
-                }),
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.id
+                        ? { ...todo, isCompleted: true }
+                        : todo
+                    ),
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
             return {
                 ...state,
                 todoList: state.todoList.map((todo) =>
-                    todo.id === action.payload.id ? action.payload.data : todo
+                    todo.id === action.payload.id 
+                        ? action.payload.data 
+                        : todo
                 ),
                 dataVersion: state.dataVersion + 1,
                 error: '',
@@ -111,19 +112,75 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 todoList: state.todoList.map((todo) =>
-                    todo.id === action.payload.id ? action.payload.originalTodo : todo
+                    todo.id === action.payload.id 
+                        ? action.payload.originalTodo 
+                        : todo
                 ),
                 error: action.payload.message,
             };
 
-        //add cases here
-        /*  example case skeleton
-                case TODO_ACTIONS.ACTION_NAME:
+        case TODO_ACTIONS.UPDATE_TODO_START:
             return {
                 ...state,
-                //migrated logic,
-        };
-        */
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.editedTodo.id 
+                        ? { ...action.payload.editedTodo } 
+                        : todo
+                ),
+            };
+
+        case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
+            return {
+                ...state,
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.editedTodo.id 
+                        ? action.payload.data 
+                        : todo
+                ),
+                dataVersion: state.dataVersion + 1,
+                error: '',
+            };
+
+        case TODO_ACTIONS.UPDATE_TODO_ERROR:
+            return {
+                ...state,
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.editedTodo.id 
+                        ? action.payload.originalTodo 
+                        : todo
+                ),
+                error: action.payload.message,
+            };
+
+            
+        case TODO_ACTIONS.SET_SORT:
+            return {
+                ...state,
+                sortBy: action.payload.sortBy,
+                sortDirection: action.payload.sortDirection,
+            };
+
+        case TODO_ACTIONS.SET_FILTER:
+            return {
+                ...state,
+                filterTerm: action.payload.newTerm,
+            };
+
+        case TODO_ACTIONS.CLEAR_ERROR:
+            return {
+                ...state,
+                error: ''
+            };
+
+        case TODO_ACTIONS.RESET_FILTERS:
+            return {
+                ...state,
+                filterTerm: '',
+                sortBy: 'createdAt',
+                sortDirection: 'desc',
+                filterError: '',
+            };            
+
         default:
             throw new Error(`Unknown action type: ${action.type}`);
         }
