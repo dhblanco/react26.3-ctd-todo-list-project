@@ -48,7 +48,7 @@ export function todoReducer(state, action) {
                 isTodoListLoading: false,
                 error: '',
                 filterError: '',
-        };
+            };
 
         case TODO_ACTIONS.FETCH_ERROR:
             return {
@@ -60,25 +60,30 @@ export function todoReducer(state, action) {
                 filterError: action.payload.isFilterError
                     ? action.payload.message
                     : '',
-        };
+            };
 
         case TODO_ACTIONS.ADD_TODO_START:
             return {
                 ...state,
-                //migrated logic: setTodoList((previous) => [newTodo, ...previous]);
-        };
+                todoList: [action.payload.newTodo, ...state.todoList],
+            };
 
         case TODO_ACTIONS.ADD_TODO_SUCCESS:
             return {
                 ...state,
-                //migrated logic,
-        };
+                todoList: state.todoList.map((todo) =>
+                     todo.id === action.payload.newTodo.id ? action.payload.data : todo
+                    ),
+                dataVersion: state.dataVersion + 1,
+                error: '',
+            };
 
         case TODO_ACTIONS.ADD_TODO_ERROR:
             return {
                 ...state,
-                //migrated logic,
-        };
+                todoList: state.todoList.filter((todo) => todo.id !== action.payload.newTodo.id),
+                error: action.payload.message,
+            };
 
         //add cases here
         /*  example case skeleton
