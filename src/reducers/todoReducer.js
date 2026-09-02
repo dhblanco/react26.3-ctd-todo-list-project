@@ -17,14 +17,14 @@ export const TODO_ACTIONS = {
     SET_SORT: 'SET_SORT',
     SET_FILTER: 'SET_FILTER',
     CLEAR_ERROR: 'CLEAR_ERROR',
-    SET_FILTERS: 'SET_FILTERS',
+    RESET_FILTERS: 'RESET_FILTERS',
 }
 
 export const initialTodoState = {
     todoList: [],
     error: "",
     filterError: "",
-    isTodoListLoading: false,
+    isTodoListLoading: true,
     sortBy: "createdAt",
     sortDirection: "asc",
     filterTerm: "",
