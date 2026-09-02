@@ -85,6 +85,37 @@ export function todoReducer(state, action) {
                 error: action.payload.message,
             };
 
+        case TODO_ACTIONS.COMPLETE_TODO_START:
+            return {
+                ...state,
+                    // Optimistically mark the todo as completed
+                todoList: state.todoList.map((todo) => {
+                    if (todo.id === action.payload.id) {
+                        return { ...todo, isCompleted: true };
+                    };
+                    return todo;
+                }),
+            };
+
+        case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
+            return {
+                ...state,
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.id ? action.payload.data : todo
+                ),
+                dataVersion: state.dataVersion + 1,
+                error: '',
+            }
+
+        case TODO_ACTIONS.COMPLETE_TODO_ERROR:
+            return {
+                ...state,
+                todoList: state.todoList.map((todo) =>
+                    todo.id === action.payload.id ? action.payload.originalTodo : todo
+                ),
+                error: action.payload.message,
+            };
+
         //add cases here
         /*  example case skeleton
                 case TODO_ACTIONS.ACTION_NAME:
