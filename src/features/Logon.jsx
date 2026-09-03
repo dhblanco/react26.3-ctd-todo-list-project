@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useAuth } from '../contexts/AuthContext';
 
-function Logon({ onSetEmail,onSetToken }) {
+function Logon() {
+    const { login } = useAuth();
+
     //set up authentication state
 
     //  controlled form inputs
