@@ -27,8 +27,11 @@ function TodosPage({token}) {
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
   
   function handleFilterChange(newTerm) {
-    setFilterTerm(newTerm);
-  }
+    dispatch({
+      type: TODO_ACTIONS.SET_FILTER,
+      payload: { newTerm },
+    });
+  };
 
   const invalidateCache = useCallback(() => {
     setDataVersion(prev => prev + 1);
@@ -39,7 +42,9 @@ function TodosPage({token}) {
 
     async function fetchTodos() {
 
-      dispatch({ type: TODO_ACTIONS.FETCH_START });
+      dispatch({ 
+        type: TODO_ACTIONS.FETCH_START
+      });
 
       try {
         const paramsObject = {
@@ -107,9 +112,12 @@ function TodosPage({token}) {
       title: todoTitle,
       isCompleted: false,
     };
-    /*MIGRATE LOGIC TO ADD_TODO_START
-    // Optimistically add the new todo to the list immediately
-    setTodoList((previous) => [newTodo, ...previous]); */
+
+    dispatch({
+      type: TODO_ACTIONS.ADD_TODO_START,
+      payload: { newTodo },
+    });
+
 
     try {
       const response = await fetch('/api/tasks', {
@@ -129,32 +137,42 @@ function TodosPage({token}) {
         throw new Error('Unable to add todo');
       }
 
-      const data = await response.json();
+    const data = await response.json();
 
-      // Replace temporary todo with the todo returned by the server
-      setTodoList((previous) => previous.map((todo) => todo.id === newTodo.id ? data : todo
-      )
-      );
+    dispatch({
+      type: TODO_ACTIONS.ADD_TODO_SUCCESS,
+      payload: { 
+        newTodo,
+        data,
+       },
+    });
 
-      invalidateCache();
-
-      setError("");
     } catch (error) {
-      // Remove the temporary todo if the API request failed
-      setTodoList((previous) => previous.filter((todo) => todo.id !== newTodo.id)
-      );
+      dispatch({
+        type: TODO_ACTIONS.ADD_TODO_ERROR,
+        payload: {
+          newTodo,
+          message: error.message,
+        },
+      });
 
-      setError(error.message);
     }
   }
 
   const completeTodo = async (id) => {
     // Store the original todo in case we need to roll back
     const originalTodo = todoList.find((todo) => todo.id === id);
+   
     if (!originalTodo) {
-    return;
-}
+      return;
+    };
 
+    dispatch({
+      type: TODO_ACTIONS.COMPLETE_TODO_START,
+      payload: { id, },
+    });
+
+    /* MIGRATE TO COMPELTE_TODO_START
     // Optimistically mark the todo as completed
     setTodoList((previous) =>
       previous.map((todo) => {
@@ -165,6 +183,7 @@ function TodosPage({token}) {
         return todo;
       })
     );
+    */
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
@@ -184,24 +203,36 @@ function TodosPage({token}) {
       }
     const data = await response.json();
 
-    setTodoList((previous) =>
-    previous.map((todo) =>
-        todo.id === id ? data : todo
-      )
-   );
-
-   invalidateCache();
-
-   setError("");
-    } catch (error) {
-      // Roll back to the original todo if the API request failed
-      setTodoList((previous) =>
+    dispatch({
+      type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
+      payload: { data, id, },
+    });
+      /* MIGRRATE TO COMPLETE_TODO_SUCCESS:
+        setTodoList((previous) =>
         previous.map((todo) =>
-          todo.id === id ? originalTodo : todo
-        )
+            todo.id === id ? data : todo
+          )
       );
 
-      setError(error.message);
+      invalidateCache();
+
+      setError("");
+      */
+    } catch (error) {
+      dispatch({
+        type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
+        payload: {id,},
+      });
+      /* MIGRATE TO COMPLETE_TODO_ERROR:
+        // Roll back to the original todo if the API request failed
+        setTodoList((previous) =>
+          previous.map((todo) =>
+            todo.id === id ? originalTodo : todo
+          )
+        );
+
+        setError(error.message);
+      */
     }
   };
 
@@ -210,17 +241,22 @@ function TodosPage({token}) {
     const originalTodo = todoList.find(
       (todo) => todo.id === editedTodo.id
     );
+    
     if (!originalTodo) {
-    return;
-}
-
+      return;
+    }
+    dispatch({
+      type: TODO_ACTIONS.UPDATE_TODO_START,
+      payload: { editedTodo, },
+    });
+    /* MIGRATE TO UPDATE_TODO_START
     // Optimistically update the todo
-    setTodoList((previous) =>
-      previous.map((todo) =>
-        todo.id === editedTodo.id ? { ...editedTodo } : todo
-      )
-    );
-
+      setTodoList((previous) =>
+        previous.map((todo) =>
+          todo.id === editedTodo.id ? { ...editedTodo } : todo
+        )
+      );
+    */
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
         method: 'PATCH',
@@ -239,7 +275,11 @@ function TodosPage({token}) {
         throw new Error('Unable to update todo');
       }
       const data = await response.json();
-
+      dispatch({
+        type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
+        payload: { data, },
+      });
+      /* MIGRATE TO UPDATE_TODO_SUCCESS:
         setTodoList((previous) =>
         previous.map((todo) =>
             todo.id === editedTodo.id ? data : todo
@@ -249,14 +289,23 @@ function TodosPage({token}) {
         invalidateCache();
 
         setError("");
+      */
     } catch (error) {
-      setTodoList((previous) =>
-        previous.map((todo) =>
-          todo.id === editedTodo.id ? originalTodo : todo
-        )
-      );
+            dispatch({
+        type: TODO_ACTIONS.UPDATE_TODO_ERROR,
+        payload: { 
+          editedTodo,
+          message: error.message, },
+      });
+      /* MIGRATE TO UPDATE_TODO_ERROR:
+        setTodoList((previous) =>
+          previous.map((todo) =>
+            todo.id === editedTodo.id ? originalTodo : todo
+          )
+        );
 
-      setError(error.message);
+        setError(error.message);
+      */
     }
   };
   

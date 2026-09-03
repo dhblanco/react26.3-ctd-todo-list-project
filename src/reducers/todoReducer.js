@@ -169,7 +169,8 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.CLEAR_ERROR:
             return {
                 ...state,
-                error: ''
+                error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.RESET_FILTERS:
@@ -177,7 +178,7 @@ export function todoReducer(state, action) {
                 ...state,
                 filterTerm: '',
                 sortBy: 'createdAt',
-                sortDirection: 'desc',
+                sortDirection: 'asc',
                 filterError: '',
             };            
 
