@@ -334,14 +334,14 @@ function TodosPage({token}) {
           <p>{filterError}</p>
 
           <button onClick={() => {
-            dispatch({ type: TODO_ACTIONS.CLEAR_ERROR, });
+            dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR, });
           }}>
             Clear Filter Error
           </button>
 
           <button
             onClick={() => {
-+              dispatch({ type: TODO_ACTIONS.RESET_FILTERS, });
+              dispatch({ type: TODO_ACTIONS.RESET_FILTERS, });
             }}
           >
             Reset Filters
