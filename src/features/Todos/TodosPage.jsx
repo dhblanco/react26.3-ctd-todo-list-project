@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useReducer } from 'react';
+import { useEffect, useCallback, useReducer } from 'react';
 import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm';
 import useDebounce from '../../utils/useDebounce';
@@ -33,9 +33,13 @@ function TodosPage({token}) {
     });
   };
 
+/* NOT NEEDED ANYMORE SINCE DATAVERSION BELONGS TO REDUCER NOW
+
   const invalidateCache = useCallback(() => {
     setDataVersion(prev => prev + 1);
   }, []);
+  
+*/
 
   useEffect(() => {
     if (!token) return;
@@ -281,7 +285,7 @@ function TodosPage({token}) {
       const data = await response.json();
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
-        payload: { data, },
+        payload: { data, editedTodo, },
       });
       /* MIGRATE TO UPDATE_TODO_SUCCESS:
         setTodoList((previous) =>
@@ -319,7 +323,9 @@ function TodosPage({token}) {
             {error && (
                 <div>
                     <p>{error}</p>
-                    <button onClick={() => setError('')}>Clear Error</button>
+                    <button onClick={() => {
+                      dispatch({ type: TODO_ACTIONS.CLEAR_ERROR, });
+                    }}>Clear Error</button>
                 </div>
            )}
 
@@ -327,16 +333,15 @@ function TodosPage({token}) {
         <div>
           <p>{filterError}</p>
 
-          <button onClick={() => setFilterError("")}>
+          <button onClick={() => {
+            dispatch({ type: TODO_ACTIONS.CLEAR_ERROR, });
+          }}>
             Clear Filter Error
           </button>
 
           <button
             onClick={() => {
-              setFilterTerm("");
-              setSortBy("createdAt");
-              setSortDirection("desc");
-              setFilterError("");
++              dispatch({ type: TODO_ACTIONS.RESET_FILTERS, });
             }}
           >
             Reset Filters
@@ -352,8 +357,24 @@ function TodosPage({token}) {
             <SortBy
               sortBy={sortBy}
               sortDirection={sortDirection}
-              onSortByChange={setSortBy}
-              onSortDirectionChange={setSortDirection}
+              onSortByChange={(newSortBy) =>
+                dispatch({ 
+                  type: TODO_ACTIONS.SET_SORT, 
+                  payload: {
+                    sortBy: newSortBy,
+                    sortDirection: sortDirection,
+                },
+                })                
+              }
+              onSortDirectionChange={(newSortDirection) =>
+                dispatch({ 
+                  type: TODO_ACTIONS.SET_SORT, 
+                  payload: {
+                    sortBy: sortBy,
+                    sortDirection: newSortDirection,
+                  },
+                })                
+              }
             />
             <TodoForm onAddTodo={addTodo} />
             <TodoList 
