@@ -67,6 +67,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 todoList: [action.payload.newTodo, ...state.todoList],
+                error: '',
             };
 
         case TODO_ACTIONS.ADD_TODO_SUCCESS:
@@ -95,6 +96,7 @@ export function todoReducer(state, action) {
                         ? { ...todo, isCompleted: true }
                         : todo
                     ),
+                error: '',
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
@@ -128,6 +130,7 @@ export function todoReducer(state, action) {
                         ? { ...action.payload.editedTodo } 
                         : todo
                 ),
+                error: '',
             };
 
         case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
