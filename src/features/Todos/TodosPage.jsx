@@ -221,7 +221,11 @@ function TodosPage({token}) {
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
-        payload: {id,},
+        payload: {
+          id,
+          originalTodo,
+          message: error.message,
+        },
       });
       /* MIGRATE TO COMPLETE_TODO_ERROR:
         // Roll back to the original todo if the API request failed
@@ -295,6 +299,7 @@ function TodosPage({token}) {
         type: TODO_ACTIONS.UPDATE_TODO_ERROR,
         payload: { 
           editedTodo,
+          originalTodo,
           message: error.message, },
       });
       /* MIGRATE TO UPDATE_TODO_ERROR:
