@@ -49,13 +49,51 @@ export function AuthProvider({ children }) {
         };
     }
     };
+
+    const logout = async () => {
+        try {
+            if (!token) {
+                setEmail('');
+                setToken('');
+                return { success: true };
+            }
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                },
+                credentials: 'include',
+            };
+            
+            //NOTE - instructions say "/api/user/logoff" instead of "users" like in the existing login endpoint, be mindful
+            const res = await fetch('/api/users/logoff', options);  
+
+            if (!res.ok) {
+                throw new Error('Logout failed');
+            }
+
+            return { success: true };
+        }
+        catch (error) {
+            return {
+            success: false,
+            error: 'Network error during logoff',
+            };
+        }
+        finally {
+            setEmail('');
+            setToken('');
+        }
+    };
+
   // Context value object
   const value = {
-    email,
-    token,
-    isAuthenticated: !!token,
-    login,
-    logout,
+    email,                      // current user email
+    token,                      // CSRF token for API requests
+    isAuthenticated: !!token,   // computed boolean for auth status
+    login,                      // function to authenticate user
+    logout,                     // function to clear authentication
   };
   
   return (
