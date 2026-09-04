@@ -66,8 +66,7 @@ export function AuthProvider({ children }) {
                 credentials: 'include',
             };
             
-            //NOTE - instructions say "/api/user/logoff" instead of "users" like in the existing login endpoint, be mindful
-            const res = await fetch('/api/users/logoff', options);  
+            const res = await fetch('/api/user/logoff', options);  
 
             if (!res.ok) {
                 throw new Error('Logout failed');
