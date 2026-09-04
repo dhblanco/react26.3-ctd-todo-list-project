@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
         error: `Authentication failed: ${data?.message}`,
       };
     }
-    } catch (error) {
+    } catch {
         return {
         success: false,
         error: 'Network error during login',
@@ -75,7 +75,7 @@ export function AuthProvider({ children }) {
 
             return { success: true };
         }
-        catch (error) {
+        catch {
             return {
             success: false,
             error: 'Network error during logoff',
