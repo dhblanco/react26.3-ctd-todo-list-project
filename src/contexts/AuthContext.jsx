@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   // State for authentication
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
+  const [logoffError, setLogoffError] = useState('');
   
   // Functions will go here...
   const login = async (userEmail, password) => {
@@ -51,6 +52,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async () => {
+      setLogoffError('');
         try {
             if (!token) {
                 setEmail('');
@@ -66,7 +68,7 @@ export function AuthProvider({ children }) {
                 credentials: 'include',
             };
             
-            const res = await fetch('/api/user/logoff', options);  
+            const res = await fetch('/api/users/logoff', options);  
 
             if (!res.ok) {
                 throw new Error('Logout failed');
@@ -74,10 +76,12 @@ export function AuthProvider({ children }) {
 
             return { success: true };
         }
-        catch {
+        catch (error) {
+          const errorMessage = error.message;
+          setLogoffError(errorMessage);
             return {
             success: false,
-            error: 'Network error during logoff',
+            error: errorMessage,
             };
         }
         finally {
@@ -93,7 +97,8 @@ export function AuthProvider({ children }) {
     isAuthenticated: !!token,   // computed boolean for auth status
     login,                      // function to authenticate user
     logout,                     // function to clear authentication
-  };
+    logoffError,
+    };
   
   return (
     <AuthContext.Provider value={value}>

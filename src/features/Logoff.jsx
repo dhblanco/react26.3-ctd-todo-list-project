@@ -1,17 +1,11 @@
-import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function Logoff() {
 
-    const { logout } = useAuth();
-    const [ logoffError, setLogoffError ] = useState('');
+    const { logout, logoffError } = useAuth();
 
     const handleLogoff = async () => {
-        const result = await logout();
-
-        if (!result.success) {
-            setLogoffError(result.error);
-        }
+        await logout();
     };
 
     return (
