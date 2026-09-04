@@ -342,16 +342,17 @@ function TodosPage() {
           }}>
             Clear Filter Error
           </button>
-
-          <button
-            onClick={() => {
-              dispatch({ type: TODO_ACTIONS.RESET_FILTERS, });
-            }}
-          >
-            Reset Filters
-          </button>
         </div>
       )}
+      
+      <button
+        onClick={() => {
+          dispatch({ type: TODO_ACTIONS.RESET_FILTERS, });
+        }}
+      >
+        Reset Filters
+      </button>
+
 
       {isTodoListLoading && <p>Loading todos...</p>}
             <FilterInput
