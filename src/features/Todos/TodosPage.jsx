@@ -36,13 +36,19 @@ function TodosPage() {
     });
   };
 
-/* NOT NEEDED ANYMORE SINCE DATAVERSION BELONGS TO REDUCER NOW
+/*  NOT NEEDED ANYMORE SINCE DATAVERSION BELONGS TO REDUCER NOW
+    jk... apparently feedback was misleading, let's bring this back*/
 
-  const invalidateCache = useCallback(() => {
-    setDataVersion(prev => prev + 1);
-  }, []);
-  
-*/
+const invalidateCache = useCallback(() => {
+    console.log(
+      'Invalidating Memo cache after todo mutation\n',
+      `Version ${dataVersion}`
+    );
+    dispatch({
+      type: TODO_ACTIONS.DATA_VERSION_COUNT,
+    });
+  }, [dataVersion]);
+
 
   useEffect(() => {
     if (!token) return;
@@ -145,6 +151,7 @@ function TodosPage() {
       }
 
     const data = await response.json();
+    invalidateCache();
 
     dispatch({
       type: TODO_ACTIONS.ADD_TODO_SUCCESS,
@@ -154,7 +161,7 @@ function TodosPage() {
        },
     });
 
-    } catch (error) {
+  } catch (error) {
       dispatch({
         type: TODO_ACTIONS.ADD_TODO_ERROR,
         payload: {
@@ -209,6 +216,7 @@ function TodosPage() {
         throw new Error('Unable to complete todo');
       }
     const data = await response.json();
+    invalidateCache();
 
     dispatch({
       type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
@@ -286,6 +294,9 @@ function TodosPage() {
         throw new Error('Unable to update todo');
       }
       const data = await response.json();
+      invalidateCache();
+
+
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
         payload: { data, editedTodo, },

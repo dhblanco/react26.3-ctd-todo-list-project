@@ -19,6 +19,7 @@ export const TODO_ACTIONS = {
     CLEAR_ERROR: 'CLEAR_ERROR',
     CLEAR_FILTER_ERROR: 'CLEAR_FILTER_ERROR',
     RESET_FILTERS: 'RESET_FILTERS',
+    DATA_VERSION_COUNT: 'DATA_VERSION_COUNT',
 }
 
 export const initialTodoState = {
@@ -36,10 +37,19 @@ export function todoReducer(state, action) {
     //  let's explore flow
     console.log('REDUCER ACTION:', action.type);
     console.log('PAYLOAD:', action.payload);
+    console.log('DATA VERSION:', state.dataVersion);
     console.log('BEFORE STATE:', state);
+    console.log('****************************');
+
 
     //rest of code below
     switch (action.type) {
+        case TODO_ACTIONS.DATA_VERSION_COUNT:
+            return {
+                ...state,
+                dataVersion: state.dataVersion + 1,
+            };
+
         case TODO_ACTIONS.FETCH_START:
             return {
                 ...state,
@@ -85,7 +95,7 @@ export function todoReducer(state, action) {
                 todoList: state.todoList.map((todo) =>
                      todo.id === action.payload.newTodo.id ? action.payload.data : todo
                     ),
-                dataVersion: state.dataVersion + 1,
+                //dataVersion: state.dataVersion + 1,
                 isTodoListLoading: false,               
                 error: '',
             };
@@ -123,7 +133,7 @@ export function todoReducer(state, action) {
                         ? action.payload.data 
                         : todo
                 ),
-                dataVersion: state.dataVersion + 1,
+                //dataVersion: state.dataVersion + 1,
                 error: '',
                 isTodoListLoading: false,               
 
@@ -166,7 +176,7 @@ export function todoReducer(state, action) {
                         ? action.payload.data 
                         : todo
                 ),
-                dataVersion: state.dataVersion + 1,
+                //dataVersion: state.dataVersion + 1,
                 isTodoListLoading: false,               
                 error: '',
             };
