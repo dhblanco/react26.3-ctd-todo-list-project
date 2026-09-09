@@ -191,7 +191,6 @@ export function todoReducer(state, action) {
         ...state,
         sortBy: action.payload.sortBy,
         sortDirection: action.payload.sortDirection,
-        filterError: "",
       };
 
     case TODO_ACTIONS.SET_FILTER:
@@ -216,10 +215,9 @@ export function todoReducer(state, action) {
     case TODO_ACTIONS.RESET_FILTERS:
       return {
         ...state,
-        filterTerm: "",
-        sortBy: "createdAt",
-        sortDirection: "asc",
-        filterError: "",
+        filterTerm: initialTodoState.filterTerm,
+        sortBy: initialTodoState.sortBy,
+        sortDirection: initialTodoState.sortDirection,
       };
 
     default:
