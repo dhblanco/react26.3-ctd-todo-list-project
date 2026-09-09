@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from '../contexts/AuthContext';
+import LoginPage from "../pages/LoginPage";
 
 function Logon() {
     const { login } = useAuth();
@@ -35,40 +36,9 @@ function Logon() {
         }
     };
     return (
-        <form onSubmit={handleSubmit}>
-            {authError && (
-                <section>
-                    <p>{authError}</p>
-                </section>
-            )}
-            <label htmlFor="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-            />
-            <label htmlFor="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-            />
-            {isLoggingOn && (
-                <p>Processing...</p>
-            )}
-            <button
-                type="submit"
-                disabled={isLoggingOn}
-            >
-                {isLoggingOn ? "Logging in..." : "Log On"}
-            </button>
-        </form>
+        <>
+            <LoginPage />
+        </>
     )
 }
 

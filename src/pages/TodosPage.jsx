@@ -1,15 +1,15 @@
 import { useEffect, useCallback, useReducer } from "react";
-import TodoList from "./TodoList/TodoList";
-import TodoForm from "./TodoForm";
-import useDebounce from "../../utils/useDebounce";
-import FilterInput from "../../shared/FilterInput";
-import SortBy from "../../shared/SortBy";
+import TodoList from "../features/Todos/TodoList/TodoList";
+import TodoForm from "../features/Todos/TodoForm";
+import useDebounce from "../utils/useDebounce";
+import FilterInput from "../shared/FilterInput";
+import SortBy from "../shared/SortBy";
 import {
   todoReducer,
   initialTodoState,
   TODO_ACTIONS,
-} from "../../reducers/todoReducer";
-import { useAuth } from "../../contexts/AuthContext";
+} from "../reducers/todoReducer";
+import { useAuth } from "../contexts/AuthContext";
 
 function TodosPage() {
   const { token } = useAuth();
@@ -38,12 +38,10 @@ function TodosPage() {
     jk... apparently feedback was misleading, let's bring this back*/
 
   const invalidateCache = useCallback(() => {
- /*
-    console.log(
+      console.log(
       "Invalidating Memo cache after todo mutation\n",
       `Version ${dataVersion}`,
     );
-*/
 
     dispatch({
       type: TODO_ACTIONS.DATA_VERSION_COUNT,
