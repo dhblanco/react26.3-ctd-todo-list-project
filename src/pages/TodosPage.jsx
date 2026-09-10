@@ -15,7 +15,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function TodosPage() {
   const { token } = useAuth();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams ] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
   // Get status filter from URL, default to 'all'
   const statusFilter = searchParams.get("status") || "all";
@@ -354,6 +354,7 @@ function TodosPage() {
       <button
         onClick={() => {
           dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
+          setSearchParams({});
         }}
       >
         Reset Filters
