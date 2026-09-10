@@ -1,20 +1,22 @@
-import { useLocation, useNavigate, } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
-function RequireAuth() {
-    /* Create a RequireAuth function component that accepts children as props
+function RequireAuth({children}) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    Use useAuth() to get the current authentication status
-    Use useLocation() to capture the current page location
-    Use useNavigate() to programmatically navigate to the login page
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: location } });
+    }
+  }, [isAuthenticated, navigate, location]);
+  if (!isAuthenticated) {
+    return <p>Loading...</p>;
+  }
 
-    In a useEffect hook, check if the user is not authenticated:
-    If not authenticated, navigate to '/login' and pass the current location in state for preservation
-    This allows users to return to their intended destination after logging in
-    
-    Return a loading message while redirecting if not authenticated
-    Return the children components if the user is authenticated*/
-};
+  return children;
+}
 
 export default RequireAuth;

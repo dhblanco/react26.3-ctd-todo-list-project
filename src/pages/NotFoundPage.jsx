@@ -1,8 +1,30 @@
+import { Link } from "react-router";
+
 function NotFoundPage() {
-    /*  ### Create src/pages/NotFoundPage.jsx:
-        Create and export a 404 error page for unmatched routes
-        Include helpful navigation links back to main parts of the app (remember to use React-Router's Link component)
-    */
+  return (
+    <main>
+      <h1>404 - Page Not Found</h1>
+
+      <p>Sorry, the page you're looking for doesn't exist.</p>
+
+      <p>Try one of these pages:</p>
+
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/todos">Todos</Link>
+        </li>
+      </ul>
+    </main>
+  );
 }
 
 export default NotFoundPage;

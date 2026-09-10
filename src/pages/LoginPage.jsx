@@ -17,54 +17,66 @@ function LoginPage() {
     }
   }, [isAuthenticated, navigate, from]);
 
+  // Form state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoggingOn, setIsLoggingOn] = useState(false);
+  const [authError, setAuthError] = useState("");
+
   // Handle login form submission
-  async function handleSubmit(e) {
-    e.preventDefault();
-    // ... existing login logic
-    const result = await login(email, password);
-    if (result.success) {
-      // useEffect will handle redirect
-    }
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setAuthError("");
+    setIsLoggingOn(true);
+    
+    try {
+       const result = await login(email, password);
+
+        if (!result.success) {
+            setAuthError(result.error);
+        }  
+    } catch (error) {
+        setAuthError(`Error: ${error.name} | ${error.message}`);
+    } finally {
+        setIsLoggingOn(false);
+    }   
   }
 
-  // ... rest of component with form JSX
-  return(
-    
-        <form onSubmit={handleSubmit}>
-            {authError && (
-                <section>
-                    <p>{authError}</p>
-                </section>
-            )}
-            <label htmlFor="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-            />
-            <label htmlFor="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-            />
-            {isLoggingOn && (
-                <p>Processing...</p>
-            )}
-            <button
-                type="submit"
-                disabled={isLoggingOn}
-            >
-                {isLoggingOn ? "Logging in..." : "Log On"}
-            </button>
-        </form>
-  )
+  return (
+    <form onSubmit={handleSubmit}>
+      {authError && (
+        <section>
+          <p>{authError}</p>
+        </section>
+      )}
+
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        required
+      />
+
+      {isLoggingOn && <p>Processing...</p>}
+      
+      <button type="submit" disabled={isLoggingOn}>
+        {isLoggingOn ? "Logging in..." : "Log On"}
+      </button>
+    </form>
+  );
 }
 
 export default LoginPage;
