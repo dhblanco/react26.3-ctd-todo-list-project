@@ -3,14 +3,35 @@ import { useAuth } from "../contexts/AuthContext";
 
 function ProfilePage() {
   const { email, token } = useAuth();
-  const [stats, setStats] = useState({ total: 0, completed: 0, active: 0 });
+
+  const [todoStats, setTodoStats] = useState({
+    total: 0,
+    completed: 0,
+    active: 0,
+  });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   useEffect(() => {
     async function fetchTodoStats() {
+      if (!token) return;
+
       try {
-        const response = await fetch("/api/tasks?limit=100", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        setLoading(true);
+        setError("");
+
+        const options = {
+          method: "GET",
+          headers: { "X-CSRF-TOKEN": token },
+          credentials: "include",
+        };
+
+        const response = await fetch("/api/tasks?limit=100", options);
+
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
+
         if (!response.ok) {
           throw new Error(`Failed to fetch todos: ${response.status}`);
         }
@@ -21,35 +42,44 @@ function ProfilePage() {
         const completed = todos.filter((todo) => todo.isCompleted).length;
         const total = todos.length;
         const active = total - completed;
-        
-        setStats({ total, completed, active });
+
+        setTodoStats({ total, completed, active });
       } catch (error) {
-        setError(error.message);
+        setError(`Error loading statistics: ${error.message}`);
+      } finally {
+        setLoading(false);
       }
     }
-    if (token) {
-      fetchTodoStats();
-    }
+    fetchTodoStats();
   }, [token]);
+
+  const completionPercentage =
+    todoStats.total > 0
+      ? Math.round((todoStats.completed / todoStats.total) * 100)
+      : 0;
 
   return (
     <main>
       <h1>Profile</h1>
 
       <section>
-        <h2>User Information</h2> <p>Name: {email}</p>
+        <h2>User Profile</h2>
+        <h3>Account Information</h3>
+        <p>Name: {email}</p>
         <p>Token: {token ? "Authenticated" : "Not authenticated"}</p>
       </section>
 
       <section>
-        <h2>Todo Statistics</h2>
-        {error ? (
-          <p>{error}</p>
-        ) : (
+        <h3>Todo Statistics</h3>
+        {loading && <p>Loading statistics...</p>} 
+        {error && <p>{error}</p>}
+        {!loading && !error && (
           <>
-            <p>Total todos: {stats.total}</p>
-            <p>Completed: {stats.completed}</p>
-            <p>Active: {stats.active}</p>
+            
+            <p>Total todos: {todoStats.total}</p>
+            <p>Completed: {todoStats.completed}</p>
+            <p>Active: {todoStats.active}</p>
+            {todoStats.total > 0 && <p>Completion: {completionPercentage}%</p>}
           </>
         )}
       </section>

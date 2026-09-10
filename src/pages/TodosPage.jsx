@@ -1,3 +1,5 @@
+import { useSearchParams } from "react-router";
+import StatusFilter from "../shared/StatusFilter";
 import { useEffect, useCallback, useReducer } from "react";
 import TodoList from "../features/Todos/TodoList/TodoList";
 import TodoForm from "../features/Todos/TodoForm";
@@ -13,7 +15,10 @@ import { useAuth } from "../contexts/AuthContext";
 
 function TodosPage() {
   const { token } = useAuth();
+  const [searchParams] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+  // Get status filter from URL, default to 'all'
+  const statusFilter = searchParams.get("status") || "all";
   const {
     todoList,
     error,
@@ -38,10 +43,6 @@ function TodosPage() {
     jk... apparently feedback was misleading, let's bring this back*/
 
   const invalidateCache = useCallback(() => {
-      console.log(
-      "Invalidating Memo cache after todo mutation\n",
-      `Version ${dataVersion}`,
-    );
 
     dispatch({
       type: TODO_ACTIONS.DATA_VERSION_COUNT,
@@ -359,10 +360,7 @@ function TodosPage() {
       </button>
 
       {isTodoListLoading && <p>Loading todos...</p>}
-      <FilterInput
-        filterTerm={filterTerm}
-        onFilterChange={handleFilterChange}
-      />
+
       <SortBy
         sortBy={sortBy}
         sortDirection={sortDirection}
@@ -385,12 +383,18 @@ function TodosPage() {
           })
         }
       />
+      <StatusFilter />
+      <FilterInput
+        filterTerm={filterTerm}
+        onFilterChange={handleFilterChange}
+      />
       <TodoForm onAddTodo={addTodo} />
       <TodoList
         todoList={todoList}
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
       />
     </div>
   );
