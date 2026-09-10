@@ -23,7 +23,6 @@ const TodoList = ({
       default:
         filteredTodos = todoList;
         break;
-      /*const incompleteTodos = todoList.filter((todo) => !todo.isCompleted);*/
     }
 
     return {

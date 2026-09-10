@@ -39,9 +39,6 @@ function TodosPage() {
     });
   }
 
-  /*  NOT NEEDED ANYMORE SINCE DATAVERSION BELONGS TO REDUCER NOW
-    jk... apparently feedback was misleading, let's bring this back*/
-
   const invalidateCache = useCallback(() => {
 
     dispatch({
@@ -178,19 +175,6 @@ function TodosPage() {
       payload: { id },
     });
 
-    /* MIGRATE TO COMPELTE_TODO_START
-    // Optimistically mark the todo as completed
-    setTodoList((previous) =>
-      previous.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, isCompleted: true };
-        }
-
-        return todo;
-      })
-    );
-    */
-
     try {
       const response = await fetch(`/api/tasks/${id}`, {
         method: "PATCH",
@@ -214,17 +198,7 @@ function TodosPage() {
         type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
         payload: { data, id },
       });
-      /* MIGRRATE TO COMPLETE_TODO_SUCCESS:
-        setTodoList((previous) =>
-        previous.map((todo) =>
-            todo.id === id ? data : todo
-          )
-      );
 
-      invalidateCache();
-
-      setError("");
-      */
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
@@ -234,16 +208,6 @@ function TodosPage() {
           message: error.message,
         },
       });
-      /* MIGRATE TO COMPLETE_TODO_ERROR:
-        // Roll back to the original todo if the API request failed
-        setTodoList((previous) =>
-          previous.map((todo) =>
-            todo.id === id ? originalTodo : todo
-          )
-        );
-
-        setError(error.message);
-      */
     }
   };
 
@@ -258,14 +222,7 @@ function TodosPage() {
       type: TODO_ACTIONS.UPDATE_TODO_START,
       payload: { editedTodo },
     });
-    /* MIGRATE TO UPDATE_TODO_START
-    // Optimistically update the todo
-      setTodoList((previous) =>
-        previous.map((todo) =>
-          todo.id === editedTodo.id ? { ...editedTodo } : todo
-        )
-      );
-    */
+
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
         method: "PATCH",
@@ -290,17 +247,7 @@ function TodosPage() {
         type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
         payload: { data, editedTodo },
       });
-      /* MIGRATE TO UPDATE_TODO_SUCCESS:
-        setTodoList((previous) =>
-        previous.map((todo) =>
-            todo.id === editedTodo.id ? data : todo
-            )
-        );
 
-        invalidateCache();
-
-        setError("");
-      */
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_ERROR,
@@ -310,15 +257,6 @@ function TodosPage() {
           message: error.message,
         },
       });
-      /* MIGRATE TO UPDATE_TODO_ERROR:
-        setTodoList((previous) =>
-          previous.map((todo) =>
-            todo.id === editedTodo.id ? originalTodo : todo
-          )
-        );
-
-        setError(error.message);
-      */
     }
   };
 
