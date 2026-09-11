@@ -36,7 +36,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
             value={workingTitle}
             onChange={handleEdit}
             ref={inputRef}
-            elementId="todoTitle"
+            elementId={`todoTitle-${todo.id}`}
             labelText="Todo"
           />
         ) : (
