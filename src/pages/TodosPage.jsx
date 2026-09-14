@@ -1,19 +1,24 @@
+import { useSearchParams } from "react-router";
+import StatusFilter from "../shared/StatusFilter";
 import { useEffect, useCallback, useReducer } from "react";
-import TodoList from "./TodoList/TodoList";
-import TodoForm from "./TodoForm";
-import useDebounce from "../../utils/useDebounce";
-import FilterInput from "../../shared/FilterInput";
-import SortBy from "../../shared/SortBy";
+import TodoList from "../features/Todos/TodoList/TodoList";
+import TodoForm from "../features/Todos/TodoForm";
+import useDebounce from "../utils/useDebounce";
+import FilterInput from "../shared/FilterInput";
+import SortBy from "../shared/SortBy";
 import {
   todoReducer,
   initialTodoState,
   TODO_ACTIONS,
-} from "../../reducers/todoReducer";
-import { useAuth } from "../../contexts/AuthContext";
+} from "../reducers/todoReducer";
+import { useAuth } from "../contexts/AuthContext";
 
 function TodosPage() {
   const { token } = useAuth();
+  const [searchParams, setSearchParams ] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+  // Get status filter from URL, default to 'all'
+  const statusFilter = searchParams.get("status") || "all";
   const {
     todoList,
     error,
@@ -34,16 +39,7 @@ function TodosPage() {
     });
   }
 
-  /*  NOT NEEDED ANYMORE SINCE DATAVERSION BELONGS TO REDUCER NOW
-    jk... apparently feedback was misleading, let's bring this back*/
-
   const invalidateCache = useCallback(() => {
- /*
-    console.log(
-      "Invalidating Memo cache after todo mutation\n",
-      `Version ${dataVersion}`,
-    );
-*/
 
     dispatch({
       type: TODO_ACTIONS.DATA_VERSION_COUNT,
@@ -179,19 +175,6 @@ function TodosPage() {
       payload: { id },
     });
 
-    /* MIGRATE TO COMPELTE_TODO_START
-    // Optimistically mark the todo as completed
-    setTodoList((previous) =>
-      previous.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, isCompleted: true };
-        }
-
-        return todo;
-      })
-    );
-    */
-
     try {
       const response = await fetch(`/api/tasks/${id}`, {
         method: "PATCH",
@@ -215,17 +198,7 @@ function TodosPage() {
         type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
         payload: { data, id },
       });
-      /* MIGRRATE TO COMPLETE_TODO_SUCCESS:
-        setTodoList((previous) =>
-        previous.map((todo) =>
-            todo.id === id ? data : todo
-          )
-      );
 
-      invalidateCache();
-
-      setError("");
-      */
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
@@ -235,16 +208,6 @@ function TodosPage() {
           message: error.message,
         },
       });
-      /* MIGRATE TO COMPLETE_TODO_ERROR:
-        // Roll back to the original todo if the API request failed
-        setTodoList((previous) =>
-          previous.map((todo) =>
-            todo.id === id ? originalTodo : todo
-          )
-        );
-
-        setError(error.message);
-      */
     }
   };
 
@@ -259,14 +222,7 @@ function TodosPage() {
       type: TODO_ACTIONS.UPDATE_TODO_START,
       payload: { editedTodo },
     });
-    /* MIGRATE TO UPDATE_TODO_START
-    // Optimistically update the todo
-      setTodoList((previous) =>
-        previous.map((todo) =>
-          todo.id === editedTodo.id ? { ...editedTodo } : todo
-        )
-      );
-    */
+
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
         method: "PATCH",
@@ -291,17 +247,7 @@ function TodosPage() {
         type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
         payload: { data, editedTodo },
       });
-      /* MIGRATE TO UPDATE_TODO_SUCCESS:
-        setTodoList((previous) =>
-        previous.map((todo) =>
-            todo.id === editedTodo.id ? data : todo
-            )
-        );
 
-        invalidateCache();
-
-        setError("");
-      */
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_ERROR,
@@ -311,15 +257,6 @@ function TodosPage() {
           message: error.message,
         },
       });
-      /* MIGRATE TO UPDATE_TODO_ERROR:
-        setTodoList((previous) =>
-          previous.map((todo) =>
-            todo.id === editedTodo.id ? originalTodo : todo
-          )
-        );
-
-        setError(error.message);
-      */
     }
   };
 
@@ -355,16 +292,14 @@ function TodosPage() {
       <button
         onClick={() => {
           dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
+          setSearchParams({});
         }}
       >
         Reset Filters
       </button>
 
       {isTodoListLoading && <p>Loading todos...</p>}
-      <FilterInput
-        filterTerm={filterTerm}
-        onFilterChange={handleFilterChange}
-      />
+
       <SortBy
         sortBy={sortBy}
         sortDirection={sortDirection}
@@ -387,12 +322,18 @@ function TodosPage() {
           })
         }
       />
+      <StatusFilter />
+      <FilterInput
+        filterTerm={filterTerm}
+        onFilterChange={handleFilterChange}
+      />
       <TodoForm onAddTodo={addTodo} />
       <TodoList
         todoList={todoList}
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
       />
     </div>
   );

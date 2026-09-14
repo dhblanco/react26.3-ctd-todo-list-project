@@ -34,15 +34,7 @@ export const initialTodoState = {
 };
 
 export function todoReducer(state, action) {
-  /*     previous debugging tools to explore flow
-            console.log('REDUCER ACTION:', action.type);
-            console.log('PAYLOAD:', action.payload);
-            console.log('DATA VERSION:', state.dataVersion);
-            console.log('BEFORE STATE:', state);
-            console.log('****************************');
-    */
 
-  //rest of code below
   switch (action.type) {
     case TODO_ACTIONS.DATA_VERSION_COUNT:
       return {
@@ -83,16 +75,11 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.ADD_TODO_SUCCESS:
-        /*
-      console.log("ADD SUCCESS - optimistic ID:", action.payload.newTodo.id);
-      console.log("ADD SUCCESS - server data:", action.payload.data);*/
-
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
           todo.id === action.payload.newTodo.id ? action.payload.data : todo,
         ),
-        //dataVersion: state.dataVersion + 1,
         isTodoListLoading: false,
         error: "",
       };
@@ -108,11 +95,8 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.COMPLETE_TODO_START:
-/*      console.log("COMPLETE START ID:", action.payload.id);*/
-
       return {
         ...state,
-        // Optimistically mark the todo as completed
         todoList: state.todoList.map((todo) =>
           todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo,
         ),
@@ -120,15 +104,11 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
-/*      console.log("COMPLETE SUCCESS ID:", action.payload.id);
-      console.log("COMPLETE SUCCESS server data:", action.payload.data);*/
-
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
           todo.id === action.payload.id ? action.payload.data : todo,
         ),
-        //dataVersion: state.dataVersion + 1,
         error: "",
         isTodoListLoading: false,
       };
@@ -144,9 +124,6 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.UPDATE_TODO_START:
-/*      console.log("UPDATE START ID:", action.payload.editedTodo.id);
-      console.log("UPDATE original:", action.payload.originalTodo);*/
-
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
@@ -158,18 +135,11 @@ export function todoReducer(state, action) {
       };
 
     case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
-/*      console.log(
-        "UPDATE SUCCESS optimistic ID:",
-        action.payload.editedTodo.id,
-      );
-      console.log("UPDATE SUCCESS server data:", action.payload.data);*/
-
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
           todo.id === action.payload.editedTodo.id ? action.payload.data : todo,
         ),
-        //dataVersion: state.dataVersion + 1,
         isTodoListLoading: false,
         error: "",
       };
