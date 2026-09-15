@@ -1,21 +1,36 @@
 import { useState, useRef } from "react";
 import TextInputWithLabel from "../../../shared/TextInputWithLabel";
-import { isValidTodoTitle,  getTodoTitleError } from "../../../utils/todoValidation";
+import {
+  isValidTodoTitle,
+  getTodoTitleError,
+} from "../../../utils/todoValidation";
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
   const inputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(todo.title);
   const [titleError, setTitleError] = useState("");
+  const [hasTouchedTitle, setHasTouchedTitle] = useState(false);
 
   const handleCancel = () => {
     setWorkingTitle(todo.title);
+    setTitleError("");
+    setHasTouchedTitle(false);
     setIsEditing(false);
   };
 
   const handleEdit = (event) => {
-    setWorkingTitle(event.target.value);
-    setTitleError("");
+    const newTitle = event.target.value;
+    setWorkingTitle(newTitle);
+
+    if (hasTouchedTitle) {
+      setTitleError(getTodoTitleError(newTitle));
+    }
+  };
+
+  const handleTitleBlur = () => {
+    setHasTouchedTitle(true);
+    setTitleError(getTodoTitleError(workingTitle));
   };
 
   const handleUpdate = (event) => {
@@ -26,8 +41,10 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     event.preventDefault();
 
     const error = getTodoTitleError(workingTitle);
+    setTitleError(error);
 
     if (error) {
+      setHasTouchedTitle(true);
       return;
     }
 
@@ -37,6 +54,8 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     });
 
     setIsEditing(false);
+    setTitleError("");
+    setHasTouchedTitle(false);
   };
 
   return (
@@ -47,6 +66,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
           <TextInputWithLabel
             value={workingTitle}
             onChange={handleEdit}
+            onBlur={handleTitleBlur}
             ref={inputRef}
             elementId={`todoTitle${todo.id}`}
             labelText="Todo"
@@ -71,10 +91,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
             <button type="button" onClick={handleCancel}>
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={!isValidTodoTitle(workingTitle)}
-            >
+            <button type="submit" disabled={!isValidTodoTitle(workingTitle)}>
               Update
             </button>
             <button type="button" onClick={() => onDeleteTodo(todo.id)}>
