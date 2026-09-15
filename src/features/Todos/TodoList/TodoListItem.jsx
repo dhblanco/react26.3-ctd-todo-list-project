@@ -1,35 +1,47 @@
 import { useState, useRef } from "react";
 import TextInputWithLabel from "../../../shared/TextInputWithLabel";
-import { isValidTodoTitle } from "../../../utils/todoValidation";
+import { isValidTodoTitle,  getTodoTitleError } from "../../../utils/todoValidation";
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
   const inputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(todo.title);
+  const [titleError, setTitleError] = useState("");
+
   const handleCancel = () => {
     setWorkingTitle(todo.title);
     setIsEditing(false);
   };
+
   const handleEdit = (event) => {
     setWorkingTitle(event.target.value);
+    setTitleError("");
   };
+
   const handleUpdate = (event) => {
     if (isEditing === false) {
       return;
     }
+
     event.preventDefault();
 
-    if (isValidTodoTitle(workingTitle)) {
-      onUpdateTodo({
-        ...todo,
-        title: workingTitle,
-      });
-      setIsEditing(false);
+    const error = getTodoTitleError(workingTitle);
+
+    if (error) {
+      return;
     }
+
+    onUpdateTodo({
+      ...todo,
+      title: workingTitle.trim(),
+    });
+
+    setIsEditing(false);
   };
 
   return (
     <li>
+      {titleError && <p role="alert">{titleError}</p>}
       <form onSubmit={handleUpdate}>
         {isEditing ? (
           <TextInputWithLabel
@@ -38,6 +50,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
             ref={inputRef}
             elementId={`todoTitle${todo.id}`}
             labelText="Todo"
+            maxLength={100}
           />
         ) : (
           <>
@@ -59,8 +72,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
               Cancel
             </button>
             <button
-              type="button"
-              onClick={handleUpdate}
+              type="submit"
               disabled={!isValidTodoTitle(workingTitle)}
             >
               Update
