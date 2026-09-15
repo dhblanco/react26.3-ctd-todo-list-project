@@ -1,43 +1,76 @@
 import { useState, useRef } from "react";
 import TextInputWithLabel from "../../../shared/TextInputWithLabel";
-import { isValidTodoTitle } from "../../../utils/todoValidation";
+import {
+  isValidTodoTitle,
+  getTodoTitleError,
+} from "../../../utils/todoValidation";
 
-function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
+function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
   const inputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(todo.title);
+  const [titleError, setTitleError] = useState("");
+  const [hasTouchedTitle, setHasTouchedTitle] = useState(false);
+
   const handleCancel = () => {
     setWorkingTitle(todo.title);
+    setTitleError("");
+    setHasTouchedTitle(false);
     setIsEditing(false);
   };
+
   const handleEdit = (event) => {
-    setWorkingTitle(event.target.value);
+    const newTitle = event.target.value;
+    setWorkingTitle(newTitle);
+
+    if (hasTouchedTitle) {
+      setTitleError(getTodoTitleError(newTitle));
+    }
   };
+
+  const handleTitleBlur = () => {
+    setHasTouchedTitle(true);
+    setTitleError(getTodoTitleError(workingTitle));
+  };
+
   const handleUpdate = (event) => {
     if (isEditing === false) {
       return;
     }
+
     event.preventDefault();
 
-    if (isValidTodoTitle(workingTitle)) {
-      onUpdateTodo({
-        ...todo,
-        title: workingTitle,
-      });
-      setIsEditing(false);
+    const error = getTodoTitleError(workingTitle);
+    setTitleError(error);
+
+    if (error) {
+      setHasTouchedTitle(true);
+      return;
     }
+
+    onUpdateTodo({
+      ...todo,
+      title: workingTitle.trim(),
+    });
+
+    setIsEditing(false);
+    setTitleError("");
+    setHasTouchedTitle(false);
   };
 
   return (
     <li>
+      {titleError && <p role="alert">{titleError}</p>}
       <form onSubmit={handleUpdate}>
         {isEditing ? (
           <TextInputWithLabel
             value={workingTitle}
             onChange={handleEdit}
+            onBlur={handleTitleBlur}
             ref={inputRef}
             elementId={`todoTitle${todo.id}`}
             labelText="Todo"
+            maxLength={100}
           />
         ) : (
           <>
@@ -58,12 +91,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
             <button type="button" onClick={handleCancel}>
               Cancel
             </button>
-            <button
-              type="button"
-              onClick={handleUpdate}
-              disabled={!isValidTodoTitle(workingTitle)}
-            >
+            <button type="submit" disabled={!isValidTodoTitle(workingTitle)}>
               Update
+            </button>
+            <button type="button" onClick={() => onDeleteTodo(todo.id)}>
+              Delete
             </button>
           </>
         )}

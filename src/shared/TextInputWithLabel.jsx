@@ -1,4 +1,12 @@
-const TextInputWithLabel = ({ elementId, labelText, onChange, ref, value }) => {
+const TextInputWithLabel = ({ 
+    elementId, 
+    labelText, 
+    onChange,
+    onBlur, 
+    ref, 
+    value,
+    maxLength,
+ }) => {
     return (
         <>
             <label htmlFor={elementId}>{labelText}</label>
@@ -8,6 +16,8 @@ const TextInputWithLabel = ({ elementId, labelText, onChange, ref, value }) => {
                 id={elementId}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
+                maxLength={maxLength}
             />
         </>
     );
