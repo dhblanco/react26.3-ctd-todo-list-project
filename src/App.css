@@ -91,6 +91,7 @@ nav a:focus-visible {
   color: #183b5b;
   background-color: #fff;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .todo-add-row input {
@@ -101,6 +102,36 @@ nav a:focus-visible {
   color: #183b5b;
   background-color: #fff;
   box-sizing: border-box;
+  width: 100%;
+}
+
+.todo-add-row,
+.todo-search-row {
+  margin-bottom: 1rem;
+  padding: 0 8px;
+}
+
+input {  min-height: 44px;
+}
+
+.todo-title-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.todo-title-button:hover {
+  text-decoration: underline;
+  text-decoration-color: #e6b93f;
+}
+
+.todo-title-button:focus-visible {
+  outline: 3px solid #183b5b;
+  outline-offset: 3px;
 }
 
 .login-form button {
@@ -141,26 +172,6 @@ nav a:focus-visible {
   margin-bottom: 1rem;
 }
 
-.todo-add-row,
-.todo-search-row {
-  margin-bottom: 1rem;
-  padding: 0 8px;
-}
-
-.todo-search-row input {
-  width: 100%;
-  min-height: 44px;
-  padding: 0.5rem 0.75rem;
-  box-sizing: border-box;
-}
-
-.todo-add-row input {
-  width: 100%;
-  min-height: 44px;
-  padding: 0.5rem 0.75rem;
-  box-sizing: border-box;
-}
-
 .todo-list-paper, .paper-content {
   padding: 2rem 2rem 3rem 1.5rem;
   background-color: #fffdf7;
@@ -192,5 +203,19 @@ nav a:focus-visible {
 .todo-list-paper li {
   min-height: 40px;
   display: flex;
-  /* vertical-align: middle; */
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+}
+
+.message-error {
+  background-color: #f9e4e4;
+  border-left: 4px solid #c47f86;
+}
+
+.message p {
+  margin: 0 0 0.5rem;
 }

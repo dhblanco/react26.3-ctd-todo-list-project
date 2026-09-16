@@ -302,7 +302,7 @@ function TodosPage() {
     <div className="todo-page">
       <section className="todo-controls" aria-label="Todo controls">
         {error && (
-          <div>
+          <div className="message message-error" aria-label="Todo error">
             <p>{error}</p>
             <button
               onClick={() => {
@@ -315,7 +315,7 @@ function TodosPage() {
         )}
 
         {filterError && (
-          <div>
+          <div className="message message-error" aria-label="Filter error">
             <p role="alert">{filterError}</p>
 
             <button

@@ -81,7 +81,13 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
                 onChange={() => onCompleteTodo(todo.id)}
               />
             </label>
-            <span onClick={() => setIsEditing(true)}>{todo.title}</span>
+            <button
+              type="button"
+              className="todo-title-button"
+              onClick={() => setIsEditing(true)}
+            >
+              {todo.title}
+            </button>
           </>
         )}
 
@@ -100,7 +106,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
         )}
       </form>
       {titleError && (
-        <p role="alert" onClick={() => setTitleError("")} style={{margin:"auto auto"}}>
+        <p
+          role="alert"
+          onClick={() => setTitleError("")}
+          style={{ margin: "auto auto" }}
+        >
           {titleError}
         </p>
       )}

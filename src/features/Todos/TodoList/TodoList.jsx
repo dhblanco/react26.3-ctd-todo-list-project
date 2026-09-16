@@ -45,7 +45,7 @@ const TodoList = ({
   };
 
   return filteredTodoList.todos.length === 0 ? (
-    <p>{getEmptyMessage()}</p>
+    <p role="alert">{getEmptyMessage()}</p>
   ) : (
     <ul>
       {filteredTodoList.todos.map((todo) => (
