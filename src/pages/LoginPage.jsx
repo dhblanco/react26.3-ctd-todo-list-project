@@ -88,8 +88,13 @@ function LoginPage() {
           }}
           required
           maxLength={254}
+          aria-describedby={emailError ? "email-error" : undefined}
         />
-        {emailError && <p role="alert">{emailError}</p>}
+        {emailError && (
+          <p id="email-error" role="alert">
+            {emailError}
+          </p>
+        )}
       </div>
 
       <div className="login-field">
@@ -105,8 +110,13 @@ function LoginPage() {
           }}
           required
           maxLength={128}
+          aria-describedby={passwordError ? "password-error" : undefined}
         />
-        {passwordError && <p role="alert">{passwordError}</p>}
+        {passwordError && (
+          <p id="password-error" role="alert">
+            {passwordError}
+          </p>
+        )}
       </div>
       {isLoggingOn && <p>Processing...</p>}
 

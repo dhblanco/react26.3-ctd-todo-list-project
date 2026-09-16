@@ -79,6 +79,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
                 id={`checkbox${todo.id}`}
                 checked={todo.isCompleted}
                 onChange={() => onCompleteTodo(todo.id)}
+                aria-label={
+                  todo.isCompleted
+                    ? `Mark ${todo.title} as incomplete`
+                    : `Mark ${todo.title} as complete`
+                }
               />
             </label>
             <button
