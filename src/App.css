@@ -73,6 +73,7 @@ nav a:focus-visible {
 }
 
 .login-form input {
+  font: inherit;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
   border: 1px solid #8aa5bd;
