@@ -68,43 +68,46 @@ function LoginPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={handleSubmit} noValidate className="login-form">
       {authError && (
         <section>
-          <p>{authError}</p>
+          <p role="alert">{authError}</p>
         </section>
       )}
 
-      <label htmlFor="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        value={email}
-        onChange={(event) => {
-          setEmail(event.target.value);
-          setEmailError("");
-        }}
-        required
-        maxLength={254}
-      />
-      {emailError && <p role="alert">{emailError}</p>}
+      <div className="login-field">
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setEmailError("");
+          }}
+          required
+          maxLength={254}
+        />
+        {emailError && <p role="alert">{emailError}</p>}
+      </div>
 
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        value={password}
-        onChange={(event) => {
-          setPassword(event.target.value);
-          setPasswordError("");
-        }}
-        required
-        maxLength={128}
-      />
-      {passwordError && <p role="alert">{passwordError}</p>}
-
+      <div className="login-field">
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+            setPasswordError("");
+          }}
+          required
+          maxLength={128}
+        />
+        {passwordError && <p role="alert">{passwordError}</p>}
+      </div>
       {isLoggingOn && <p>Processing...</p>}
 
       <button type="submit" disabled={isLoggingOn}>

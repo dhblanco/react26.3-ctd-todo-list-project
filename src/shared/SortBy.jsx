@@ -5,9 +5,10 @@ const SortBy = ({
   onSortDirectionChange,
 }) => {
   return (
-    <div>
-      <div>
-        <label htmlFor="sortBy">Sort by:</label>
+    <div style={{display: "flex"}}>
+      
+      <div style={{padding: "0 8px"}}>
+        <label htmlFor="sortBy">Sort by: </label>
 
         <select
           id="sortBy"
@@ -19,8 +20,8 @@ const SortBy = ({
         </select>
       </div>
 
-      <div>
-        <label htmlFor="sortDirection">Order:</label>
+      <div style={{padding: "0 8px"}}>
+        <label htmlFor="sortDirection">Order: </label>
 
         <select
           id="sortDirection"

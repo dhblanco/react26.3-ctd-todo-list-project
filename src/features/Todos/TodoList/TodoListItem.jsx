@@ -60,7 +60,6 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
 
   return (
     <li>
-      {titleError && <p role="alert">{titleError}</p>}
       <form onSubmit={handleUpdate}>
         {isEditing ? (
           <TextInputWithLabel
@@ -69,7 +68,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
             onBlur={handleTitleBlur}
             ref={inputRef}
             elementId={`todoTitle${todo.id}`}
-            labelText="Todo"
+            labelText="Todo: "
             maxLength={100}
           />
         ) : (
@@ -100,6 +99,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
           </>
         )}
       </form>
+      {titleError && (
+        <p role="alert" onClick={() => setTitleError("")} style={{margin:"auto auto"}}>
+          {titleError}
+        </p>
+      )}
     </li>
   );
 }

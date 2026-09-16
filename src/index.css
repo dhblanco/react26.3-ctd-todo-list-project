@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: "Gaegu", cursive;
   background: #f5f1e8;
   color: #183b5b;
   line-height: 1.5;
@@ -14,10 +14,17 @@ button,
 input, 
 select {
   font: inherit;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+input, select {
+  height: 2em;
 }
 
 button {
   cursor: pointer;
+  margin: 0 0.25rem;
 }
 
 button:disabled {

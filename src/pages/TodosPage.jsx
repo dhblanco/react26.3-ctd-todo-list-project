@@ -316,7 +316,7 @@ function TodosPage() {
 
         {filterError && (
           <div>
-            <p>{filterError}</p>
+            <p role="alert">{filterError}</p>
 
             <button
               onClick={() => {
@@ -325,19 +325,18 @@ function TodosPage() {
             >
               Clear Filter Error
             </button>
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
+                setSearchParams({});
+              }}
+            >
+              Reset Filters
+            </button>
           </div>
         )}
 
         <div className="todo-filter-row">
-          <button
-            onClick={() => {
-              dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
-              setSearchParams({});
-            }}
-          >
-            Reset Filters
-          </button>
-
           {isTodoListLoading && <p>Loading todos...</p>}
 
           <SortBy
@@ -372,9 +371,11 @@ function TodosPage() {
             onFilterChange={handleFilterChange}
           />
         </div>
+
         <div className="todo-add-row">
           <TodoForm onAddTodo={addTodo} />
         </div>
+        
       </section>
 
       <section className="todo-list-paper" aria-label="Todo list">

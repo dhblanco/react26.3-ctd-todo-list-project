@@ -2,7 +2,7 @@ function FilterInput ({filterTerm, onFilterChange}) {
     return (
         <div>
             <label htmlFor="filterInput">
-                Search todos:
+                Search todos: 
             </label>
             <input
                 id="filterInput"

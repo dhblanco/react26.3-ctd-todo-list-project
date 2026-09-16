@@ -52,19 +52,20 @@ function TodoForm({ onAddTodo }) {
         onChange={handleTitleChange}
         onBlur={handleTitleBlur}
         elementId="todoTitle"
-        labelText="Add new todo:"
+        labelText="Add new todo: "
         maxLength={100}
       />
-
-      {workingTodoTitle.length > 0 && (
-        <p> {workingTodoTitle.length} / 100 characters </p>
-      )}
-
-      {titleError && <p role="alert">{titleError}</p>}
 
       <button type="submit" disabled={!isValidTodoTitle(workingTodoTitle)}>
         Add Todo
       </button>
+
+      {workingTodoTitle.length > 0 && (
+        <p role="alert"> {workingTodoTitle.length} / 100 characters </p>
+      )}
+
+      {titleError && <p role="alert" onClick={() => setTitleError("")}>{titleError}</p>}
+
     </form>
   );
 }
