@@ -299,81 +299,94 @@ function TodosPage() {
   };
 
   return (
-    <div>
-      {error && (
-        <div>
-          <p>{error}</p>
+    <div className="todo-page">
+      <section className="todo-controls" aria-label="Todo controls">
+        {error && (
+          <div>
+            <p>{error}</p>
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.CLEAR_ERROR });
+              }}
+            >
+              Clear Error
+            </button>
+          </div>
+        )}
+
+        {filterError && (
+          <div>
+            <p>{filterError}</p>
+
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR });
+              }}
+            >
+              Clear Filter Error
+            </button>
+          </div>
+        )}
+
+        <div className="todo-filter-row">
           <button
             onClick={() => {
-              dispatch({ type: TODO_ACTIONS.CLEAR_ERROR });
+              dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
+              setSearchParams({});
             }}
           >
-            Clear Error
+            Reset Filters
           </button>
+
+          {isTodoListLoading && <p>Loading todos...</p>}
+
+          <SortBy
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            onSortByChange={(newSortBy) =>
+              dispatch({
+                type: TODO_ACTIONS.SET_SORT,
+                payload: {
+                  sortBy: newSortBy,
+                  sortDirection: sortDirection,
+                },
+              })
+            }
+            onSortDirectionChange={(newSortDirection) =>
+              dispatch({
+                type: TODO_ACTIONS.SET_SORT,
+                payload: {
+                  sortBy: sortBy,
+                  sortDirection: newSortDirection,
+                },
+              })
+            }
+          />
+
+          <StatusFilter />
         </div>
-      )}
 
-      {filterError && (
-        <div>
-          <p>{filterError}</p>
-
-          <button
-            onClick={() => {
-              dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR });
-            }}
-          >
-            Clear Filter Error
-          </button>
+        <div className="todo-search-row">
+          <FilterInput
+            filterTerm={filterTerm}
+            onFilterChange={handleFilterChange}
+          />
         </div>
-      )}
+        <div className="todo-add-row">
+          <TodoForm onAddTodo={addTodo} />
+        </div>
+      </section>
 
-      <button
-        onClick={() => {
-          dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
-          setSearchParams({});
-        }}
-      >
-        Reset Filters
-      </button>
-
-      {isTodoListLoading && <p>Loading todos...</p>}
-
-      <SortBy
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-        onSortByChange={(newSortBy) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy: newSortBy,
-              sortDirection: sortDirection,
-            },
-          })
-        }
-        onSortDirectionChange={(newSortDirection) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy: sortBy,
-              sortDirection: newSortDirection,
-            },
-          })
-        }
-      />
-      <StatusFilter />
-      <FilterInput
-        filterTerm={filterTerm}
-        onFilterChange={handleFilterChange}
-      />
-      <TodoForm onAddTodo={addTodo} />
-      <TodoList
-        todoList={todoList}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        onDeleteTodo={deleteTodo}
-        dataVersion={dataVersion}
-        statusFilter={statusFilter}
-      />
+      <section className="todo-list-paper" aria-label="Todo list">
+        <TodoList
+          todoList={todoList}
+          onCompleteTodo={completeTodo}
+          onUpdateTodo={updateTodo}
+          onDeleteTodo={deleteTodo}
+          dataVersion={dataVersion}
+          statusFilter={statusFilter}
+        />
+      </section>
     </div>
   );
 }

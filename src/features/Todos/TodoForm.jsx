@@ -52,7 +52,7 @@ function TodoForm({ onAddTodo }) {
         onChange={handleTitleChange}
         onBlur={handleTitleBlur}
         elementId="todoTitle"
-        labelText="Todo"
+        labelText="Add new todo:"
         maxLength={100}
       />
 
