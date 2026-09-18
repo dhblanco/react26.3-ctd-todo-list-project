@@ -5,8 +5,8 @@ Daniela’s Todo List is a full-stack JavaScript todo application built with Rea
 
 I created this app as my class's final project to showcase what I learned during the past 11 weeks of studying React and full-stack JavaScript development.
 
-## Live Demo Link (PENDING)
-I will update this with a link once I record my demo for submission.
+## Live Demo Link
+Click this link to [watch me demo this app](https://youtu.be/ivI2mc1e4TM).
 
 ## Features
 * Add new todo items
