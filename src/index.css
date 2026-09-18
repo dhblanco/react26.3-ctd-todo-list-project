@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Gaegu", cursive;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  font-family: "Gaegu", cursive !important;
+  -webkit-text-fill-color: #183b5b !important;
+  caret-color: #183b5b;
+}
+
+body {
+  margin: 0;
+  background: #f5f1e8;
+  color: #183b5b;
+  line-height: 1.5;
+}
+
+input,
+select {
+  height: 2em;
+}
+
+button {
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #8aa5bd;
+  border-radius: 10px;
+  background-color: #fffdf7;
+  color: #183b5b;
+  font: inherit;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: #f8e7a1;
+  border-color: #e6b93f;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:focus-visible {
+  outline: 3px solid #183b5b;
+  outline-offset: 3px;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+button {
+  cursor: pointer;
+  margin: 0 0.25rem;
+}
+
+button:hover:not(:disabled) {
+  background-color: #f8e7a1;
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+option:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #183b5b;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #183b5b;
+  box-shadow: 0 0 0 3px rgba(143, 182, 217, 0.45);
+}
+
+nav a:hover {
+  background-color: #f8e7a1;
+}
+
+a {
+  color: inherit;
+}

@@ -5,6 +5,7 @@ const TodoList = ({
   todoList,
   onCompleteTodo,
   onUpdateTodo,
+  onDeleteTodo,
   dataVersion,
   statusFilter = "all",
 }) => {
@@ -44,7 +45,7 @@ const TodoList = ({
   };
 
   return filteredTodoList.todos.length === 0 ? (
-    <p>{getEmptyMessage()}</p>
+    <p role="alert">{getEmptyMessage()}</p>
   ) : (
     <ul>
       {filteredTodoList.todos.map((todo) => (
@@ -53,6 +54,7 @@ const TodoList = ({
           todo={todo}
           onCompleteTodo={onCompleteTodo}
           onUpdateTodo={onUpdateTodo}
+          onDeleteTodo={onDeleteTodo}
         />
       ))}
     </ul>

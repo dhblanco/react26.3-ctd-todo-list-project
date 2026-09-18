@@ -15,7 +15,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function TodosPage() {
   const { token } = useAuth();
-  const [searchParams, setSearchParams ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
   // Get status filter from URL, default to 'all'
   const statusFilter = searchParams.get("status") || "all";
@@ -40,7 +40,6 @@ function TodosPage() {
   }
 
   const invalidateCache = useCallback(() => {
-
     dispatch({
       type: TODO_ACTIONS.DATA_VERSION_COUNT,
     });
@@ -172,7 +171,7 @@ function TodosPage() {
 
     dispatch({
       type: TODO_ACTIONS.COMPLETE_TODO_START,
-      payload: { id },
+      payload: { id, isCompleted: !originalTodo.isCompleted },
     });
 
     try {
@@ -184,7 +183,7 @@ function TodosPage() {
         },
         credentials: "include",
         body: JSON.stringify({
-          isCompleted: true,
+          isCompleted: !originalTodo.isCompleted,
         }),
       });
 
@@ -198,7 +197,6 @@ function TodosPage() {
         type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
         payload: { data, id },
       });
-
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
@@ -247,7 +245,6 @@ function TodosPage() {
         type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
         payload: { data, editedTodo },
       });
-
     } catch (error) {
       dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_ERROR,
@@ -260,81 +257,137 @@ function TodosPage() {
     }
   };
 
+  const deleteTodo = async (id) => {
+    const originalTodo = todoList.find((todo) => todo.id === id);
+
+    if (!originalTodo) {
+      return;
+    }
+
+    dispatch({
+      type: TODO_ACTIONS.DELETE_TODO_START,
+      payload: { id },
+    });
+
+    try {
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: "DELETE",
+        headers: {
+          "X-CSRF-TOKEN": token,
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to delete todo");
+      }
+
+      dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+        payload: { id },
+      });
+    } catch (error) {
+      dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_ERROR,
+        payload: {
+          id,
+          originalTodo,
+          message: error.message,
+        },
+      });
+    }
+  };
+
   return (
-    <div>
-      {error && (
-        <div>
-          <p>{error}</p>
-          <button
-            onClick={() => {
-              dispatch({ type: TODO_ACTIONS.CLEAR_ERROR });
-            }}
-          >
-            Clear Error
-          </button>
+    <div className="todo-page">
+      <section className="todo-controls" aria-label="Todo controls">
+        {error && (
+          <div className="message message-error" aria-label="Todo error">
+            <p>{error}</p>
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.CLEAR_ERROR });
+              }}
+            >
+              Clear Error
+            </button>
+          </div>
+        )}
+
+        {filterError && (
+          <div className="message message-error" aria-label="Filter error">
+            <p role="alert">{filterError}</p>
+
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR });
+              }}
+            >
+              Clear Filter Error
+            </button>
+            <button
+              onClick={() => {
+                dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
+                setSearchParams({});
+              }}
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+
+        <div className="todo-filter-row">
+          {isTodoListLoading && <p>Loading todos...</p>}
+
+          <SortBy
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            onSortByChange={(newSortBy) =>
+              dispatch({
+                type: TODO_ACTIONS.SET_SORT,
+                payload: {
+                  sortBy: newSortBy,
+                  sortDirection: sortDirection,
+                },
+              })
+            }
+            onSortDirectionChange={(newSortDirection) =>
+              dispatch({
+                type: TODO_ACTIONS.SET_SORT,
+                payload: {
+                  sortBy: sortBy,
+                  sortDirection: newSortDirection,
+                },
+              })
+            }
+          />
+
+          <StatusFilter />
         </div>
-      )}
 
-      {filterError && (
-        <div>
-          <p>{filterError}</p>
-
-          <button
-            onClick={() => {
-              dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR });
-            }}
-          >
-            Clear Filter Error
-          </button>
+        <div className="todo-search-row">
+          <FilterInput
+            filterTerm={filterTerm}
+            onFilterChange={handleFilterChange}
+          />
         </div>
-      )}
 
-      <button
-        onClick={() => {
-          dispatch({ type: TODO_ACTIONS.RESET_FILTERS });
-          setSearchParams({});
-        }}
-      >
-        Reset Filters
-      </button>
+        <div className="todo-add-row">
+          <TodoForm onAddTodo={addTodo} />
+        </div>
+        
+      </section>
 
-      {isTodoListLoading && <p>Loading todos...</p>}
-
-      <SortBy
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-        onSortByChange={(newSortBy) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy: newSortBy,
-              sortDirection: sortDirection,
-            },
-          })
-        }
-        onSortDirectionChange={(newSortDirection) =>
-          dispatch({
-            type: TODO_ACTIONS.SET_SORT,
-            payload: {
-              sortBy: sortBy,
-              sortDirection: newSortDirection,
-            },
-          })
-        }
-      />
-      <StatusFilter />
-      <FilterInput
-        filterTerm={filterTerm}
-        onFilterChange={handleFilterChange}
-      />
-      <TodoForm onAddTodo={addTodo} />
-      <TodoList
-        todoList={todoList}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        dataVersion={dataVersion}
-        statusFilter={statusFilter}
-      />
+      <section className="todo-list-paper" aria-label="Todo list">
+        <TodoList
+          todoList={todoList}
+          onCompleteTodo={completeTodo}
+          onUpdateTodo={updateTodo}
+          onDeleteTodo={deleteTodo}
+          dataVersion={dataVersion}
+          statusFilter={statusFilter}
+        />
+      </section>
     </div>
   );
 }

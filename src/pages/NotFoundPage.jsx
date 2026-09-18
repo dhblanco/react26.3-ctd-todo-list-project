@@ -2,10 +2,14 @@ import { Link } from "react-router";
 
 function NotFoundPage() {
   return (
-    <main>
-      <h1>404 - Page Not Found</h1>
-
-      <p>Sorry, the page you're looking for doesn't exist.</p>
+    <div className="paper-page">
+      <div className="paper-padding">
+        <h1>404 - Page Not Found</h1>
+      </div>
+            <div className="paper-content">
+        <div className="paper-padding">
+          <h2>Sorry!</h2>
+      <p>The page you're looking for doesn't exist.</p>
 
       <p>Try one of these pages:</p>
 
@@ -23,7 +27,9 @@ function NotFoundPage() {
           <Link to="/todos">Todos</Link>
         </li>
       </ul>
-    </main>
+    </div>
+    </div>
+    </div>
   );
 }
 

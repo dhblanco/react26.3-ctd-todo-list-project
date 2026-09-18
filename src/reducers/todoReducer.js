@@ -1,9 +1,11 @@
+import { act } from "react";
+
 export const TODO_ACTIONS = {
   //async ADD_TODO operations
   FETCH_START: "FETCH_START",
   FETCH_SUCCESS: "FETCH_SUCCESS",
   FETCH_ERROR: "FETCH_ERROR",
-  //todo operations
+  //CRUD todo operations
   ADD_TODO_START: "ADD_TODO_START",
   ADD_TODO_SUCCESS: "ADD_TODO_SUCCESS",
   ADD_TODO_ERROR: "ADD_TODO_ERROR",
@@ -13,6 +15,9 @@ export const TODO_ACTIONS = {
   UPDATE_TODO_START: "UPDATE_TODO_START",
   UPDATE_TODO_SUCCESS: "UPDATE_TODO_SUCCESS",
   UPDATE_TODO_ERROR: "UPDATE_TODO_ERROR",
+  DELETE_TODO_START: "DELETE_TODO_START",
+  DELETE_TODO_SUCCESS: "DELETE_TODO_SUCCESS",
+  DELETE_TODO_ERROR: "DELETE_TODO_ERROR",
   //UI operations
   SET_SORT: "SET_SORT",
   SET_FILTER: "SET_FILTER",
@@ -34,7 +39,6 @@ export const initialTodoState = {
 };
 
 export function todoReducer(state, action) {
-
   switch (action.type) {
     case TODO_ACTIONS.DATA_VERSION_COUNT:
       return {
@@ -98,7 +102,9 @@ export function todoReducer(state, action) {
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
-          todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo,
+          todo.id === action.payload.id
+            ? { ...todo, isCompleted: action.payload.isCompleted }
+            : todo,
         ),
         error: "",
       };
@@ -154,6 +160,33 @@ export function todoReducer(state, action) {
         ),
         error: action.payload.message,
         isTodoListLoading: false,
+      };
+
+    case TODO_ACTIONS.DELETE_TODO_START:
+      return {
+        ...state,
+        todoList: state.todoList.filter(
+          (todo) => todo.id !== action.payload.id,
+        ),
+        error: "",
+      };
+
+    case TODO_ACTIONS.DELETE_TODO_SUCCESS:
+      return {
+        ...state,
+        isTodoListLoading: false,
+        error: "",
+      };
+
+    case TODO_ACTIONS.DELETE_TODO_ERROR:
+      return {
+        ...state,
+        todoList: [
+          ...state.todoList,
+          action.payload.originalTodo,
+        ],
+        isTodoListLoading: false,
+        error: action.payload.message,
       };
 
     case TODO_ACTIONS.SET_SORT:

@@ -22,56 +22,104 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoggingOn, setIsLoggingOn] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   // Handle login form submission
   async function handleSubmit(event) {
     event.preventDefault();
-    setAuthError("");
-    setIsLoggingOn(true);
-    
-    try {
-       const result = await login(email, password);
 
-        if (!result.success) {
-            setAuthError(result.error);
-        }  
+    setAuthError("");
+    setEmailError("");
+    setPasswordError("");
+
+    let hasValidationError = false;
+
+    if (!email.trim()) {
+      setEmailError("Email is required.");
+      hasValidationError = true;
+    } else if (!email.includes("@")) {
+      setEmailError("Please enter a valid email address.");
+      hasValidationError = true;
+    }
+
+    if (!password.trim()) {
+      setPasswordError("Password is required.");
+      hasValidationError = true;
+    }
+
+    if (hasValidationError) {
+      return;
+    }
+
+    setIsLoggingOn(true);
+
+    try {
+      const result = await login(email, password);
+
+      if (!result.success) {
+        setAuthError("Unable to login. Please check your credentials.");
+      }
     } catch (error) {
-        setAuthError(`Error: ${error.name} | ${error.message}`);
+      setAuthError("Something went wrong. Please try logging in again.");
     } finally {
-        setIsLoggingOn(false);
-    }   
+      setIsLoggingOn(false);
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate className="login-form">
       {authError && (
         <section>
-          <p>{authError}</p>
+          <p role="alert">{authError}</p>
         </section>
       )}
 
-      <label htmlFor="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        required
-      />
+      <div className="login-field">
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setEmailError("");
+          }}
+          required
+          maxLength={254}
+          aria-describedby={emailError ? "email-error" : undefined}
+        />
+        {emailError && (
+          <p id="email-error" role="alert">
+            {emailError}
+          </p>
+        )}
+      </div>
 
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-        required
-      />
-
+      <div className="login-field">
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+            setPasswordError("");
+          }}
+          required
+          maxLength={128}
+          aria-describedby={passwordError ? "password-error" : undefined}
+        />
+        {passwordError && (
+          <p id="password-error" role="alert">
+            {passwordError}
+          </p>
+        )}
+      </div>
       {isLoggingOn && <p>Processing...</p>}
-      
+
       <button type="submit" disabled={isLoggingOn}>
         {isLoggingOn ? "Logging in..." : "Log On"}
       </button>

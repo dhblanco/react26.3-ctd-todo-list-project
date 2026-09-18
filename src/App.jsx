@@ -11,8 +11,9 @@ import Header from "./shared/Header";
 
 function App() {
   return (
-    <>
-        <Header />
+    <div className="app">
+      <Header />
+      <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -35,7 +36,8 @@ function App() {
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-    </>
+      </main>
+    </div>
   );
 }
 

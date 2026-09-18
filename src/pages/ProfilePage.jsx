@@ -59,31 +59,38 @@ function ProfilePage() {
       : 0;
 
   return (
-    <main>
-      <h1>Profile</h1>
+    <div className="paper-page">
+      <div className="paper-padding">
+        <h1>Profile Details</h1>
+      </div>
+      <div className="paper-content">
+        <div className="paper-padding">
+          <h2>About Your User Profile</h2>
 
-      <section>
-        <h2>User Profile</h2>
-        <h3>Account Information</h3>
-        <p>Name: {email}</p>
-        <p>Token: {token ? "Authenticated" : "Not authenticated"}</p>
-      </section>
+          <section className="paper-section">
+            <h3>Account Information</h3>
+            <p>Name: {email}</p>
+            <p>Token: {token ? "Authenticated" : "Not authenticated"}</p>
+          </section>
 
-      <section>
-        <h3>Todo Statistics</h3>
-        {loading && <p>Loading statistics...</p>} 
-        {error && <p>{error}</p>}
-        {!loading && !error && (
-          <>
-            
-            <p>Total todos: {todoStats.total}</p>
-            <p>Completed: {todoStats.completed}</p>
-            <p>Active: {todoStats.active}</p>
-            {todoStats.total > 0 && <p>Completion: {completionPercentage}%</p>}
-          </>
-        )}
-      </section>
-    </main>
+          <section className="paper-section">
+            <h3>Todo Statistics</h3>
+            {loading && <p>Loading statistics...</p>}
+            {error && <p>{error}</p>}
+            {!loading && !error && (
+              <>
+                <p>Total todos: {todoStats.total}</p>
+                <p>Completed: {todoStats.completed}</p>
+                <p>Active: {todoStats.active}</p>
+                {todoStats.total > 0 && (
+                  <p>Completion: {completionPercentage}%</p>
+                )}
+              </>
+            )}
+          </section>
+        </div>
+      </div>
+    </div>
   );
 }
 
