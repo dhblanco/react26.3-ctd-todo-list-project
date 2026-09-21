@@ -1,7 +1,7 @@
 ## Daniela's Todo List
 Hello and welcome!
 
-Daniela’s Todo List is a full-stack JavaScript todo application built with React. It provides a clean, responsive interface for creating and managing tasks.
+Daniela’s Todo List is a full-stack JavaScript todo application built with React. Inspired by writing todos on lined paper, it provides a clean, responsive interface for creating and managing tasks.
 
 I created this app as my class's final project to showcase what I learned during the past 11 weeks of studying React and full-stack JavaScript development.
 
@@ -61,15 +61,12 @@ Before running the project locally, ensure you have
 
 ## Available Scripts
 The following npm scripts are available in the project:
-
-`npm run dev`
-Starts the Vite development server and allows the application to be viewed locally during development.
-`npm run build`
-Creates a production-ready build of the application.
-`npm run lint`
-Runs ESLint to check the code.
-`npm run preview`
-Locally previews the production build created by npm run build.
+| Script            | Used for...                                                                                            |
+|-------------------|--------------------------------------------------------------------------------------------------------|
+| `npm run dev`     | Starts the Vite development server and allows the application to be viewed locally during development. |
+| `npm run build`   | Creates a production-ready build of the application.                                                   |
+| `npm run lint`    | Runs ESLint to check the code.                                                                         |
+| `npm run preview` | Locally previews the production build created by npm run build.                                        |
 
 ## Design Decisions
 I was behind this class due to some wonky feedback from my class' AI reviewer, so I had other visions and when I was crunched for time, I remembered the basics... like an flash card generator I made as a project to apply to Code The Dream. What if I could make the todo list feel familiar, like a sheet of paper?
@@ -83,18 +80,18 @@ I organized the header, navigation, authentication controls, and todo controls n
 Accessibility was also considered in the design. Form controls use associated labels, error messages are communicated to users, and interactive elements include visible focus states for keyboard navigation. Super cool to see the feedback as you tab across the screen!
 
 ## Future improvements
-With more time, I would like to:
-* Deploy a more polished app!
+In time, I would like to:
+* Improve styling consistency, visual/spacing polish, and minor code cleanup.
 * Add movable sticky notes alongside the filter and sort controls.
 * Refine the mobile layout and responsive styling.
 * Add more visual feedback and subtle animations where appropriate.
 * Explore additional ways to personalize the paper and notebook-inspired design.
+* Implement these changes to deploy and version 1 of a soon to be more polished app!
 
 ## License Information
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
 
 Copyright (c) 2026 DANIELA HERNáNDEZ BLANCO
-
 
 ## Contact Information
 Github: [@dhblanco](https://github.com/dhblanco)

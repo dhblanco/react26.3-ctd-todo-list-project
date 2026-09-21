@@ -1,5 +1,3 @@
-import { act } from "react";
-
 export const TODO_ACTIONS = {
   //async ADD_TODO operations
   FETCH_START: "FETCH_START",
