@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 
 function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -60,7 +60,7 @@ function LoginPage() {
       if (!result.success) {
         setAuthError("Unable to login. Please check your credentials.");
       }
-    } catch (error) {
+    } catch {
       setAuthError("Something went wrong. Please try logging in again.");
     } finally {
       setIsLoggingOn(false);

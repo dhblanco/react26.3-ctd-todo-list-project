@@ -11,7 +11,7 @@ import {
   initialTodoState,
   TODO_ACTIONS,
 } from "../reducers/todoReducer";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 
 function TodosPage() {
   const { token } = useAuth();
@@ -43,7 +43,7 @@ function TodosPage() {
     dispatch({
       type: TODO_ACTIONS.DATA_VERSION_COUNT,
     });
-  }, [dataVersion]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!token) return;
